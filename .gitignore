@@ -1,0 +1,12 @@
+.idea/
+.DS_store
+.vscode
+__pycache__/
+media/
+db.sqlite3
+thEnv/
+static_common/
+node_modules/
+#dist/
+package-lock.json
+front-end/dist
