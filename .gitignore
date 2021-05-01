@@ -10,3 +10,4 @@ node_modules/
 #dist/
 package-lock.json
 front-end/dist
+moodsic/music/parser_output
