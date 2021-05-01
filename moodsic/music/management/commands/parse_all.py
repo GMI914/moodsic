@@ -15,6 +15,8 @@ YOUTUBE_SEARCH_URL = "https://www.googleapis.com/youtube/v3/search"
 YOUTUBE_COMMENT_URL = "https://www.googleapis.com/youtube/v3/commentThreads"
 SAVE_PATH = "music/parser_output/"
 
+API_KEY = 'AIzaSyDxD2mq5UYvVF-b0vFrqmAradcS3jwhhSs'
+
 
 class VideoComment:
     def __init__(self, maxResults, videoId, key):
@@ -69,5 +71,5 @@ class VideoComment:
 class Command(BaseCommand):
 
     def handle(self, *args: Any, **options: Any) -> None:
-        video = VideoComment(10000, "K1jbDJc4cfQ", 'AIzaSyDxD2mq5UYvVF-b0vFrqmAradcS3jwhhSs')
+        video = VideoComment(10000, "K1jbDJc4cfQ", API_KEY)
         video.get_video_comments()
