@@ -33,19 +33,19 @@ class VideoComment:
     def load_comments(self, responseData):
         for item in responseData["items"]:
             comment = item["snippet"]["topLevelComment"]
-            self.comments["id"].append(comment["id"])
+            # self.comments["id"].append(comment["id"])
             self.comments["comment"].append(comment["snippet"]["textDisplay"])
-            self.comments["author"].append(comment["snippet"]["authorDisplayName"])
-            self.comments["likecount"].append(comment["snippet"]["likeCount"])
-            self.comments["publishedAt"].append(comment["snippet"]["publishedAt"])
+            # self.comments["author"].append(comment["snippet"]["authorDisplayName"])
+            # self.comments["likecount"].append(comment["snippet"]["likeCount"])
+            # self.comments["publishedAt"].append(comment["snippet"]["publishedAt"])
 
             if 'replies' in item.keys():
                 for reply in item['replies']['comments']:
-                    self.replies["parentId"].append(reply["snippet"]["parentId"])
-                    self.replies["authorDisplayName"].append(reply['snippet']['authorDisplayName'])
                     self.replies["replyComment"].append(reply["snippet"]["textDisplay"])
-                    self.replies["publishedAt"].append(reply["snippet"]["publishedAt"])
-                    self.replies["likeCount"].append(reply["snippet"]["likeCount"])
+                    # self.replies["parentId"].append(reply["snippet"]["parentId"])
+                    # self.replies["authorDisplayName"].append(reply['snippet']['authorDisplayName'])
+                    # self.replies["publishedAt"].append(reply["snippet"]["publishedAt"])
+                    # self.replies["likeCount"].append(reply["snippet"]["likeCount"])
 
     def get_video_comments(self):
         url_response = json.loads(openURL(YOUTUBE_COMMENT_URL, self.params))
@@ -71,5 +71,5 @@ class VideoComment:
 class Command(BaseCommand):
 
     def handle(self, *args: Any, **options: Any) -> None:
-        video = VideoComment(10000, "K1jbDJc4cfQ", API_KEY)
+        video = VideoComment(50, "K1jbDJc4cfQ", API_KEY)
         video.get_video_comments()
