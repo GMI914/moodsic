@@ -1,9 +1,14 @@
 from recombee_api_client.api_client import RecombeeClient
 from recombee_api_client.exceptions import APIException
 from recombee_api_client.api_requests import *
-import random
+
+
 
 client = RecombeeClient('moodsic-dev', 'Pb4MhOK6751HmdEGmvISdFJqXjLDWEtVkyb2AIY4Cn1EL3vQWy9V0B236OGEj8iy')
+
+#For reseting the database before changing the model
+client.send(ResetDatabase())
+
 #########################################
 # WARNING Recombee API creates some problems when you're trying to add an object
 # when it already exists, therefore if you want to build the model of the database, you have to 
