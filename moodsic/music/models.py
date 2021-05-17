@@ -5,13 +5,22 @@ from django.utils.translation import ugettext_lazy as _
 class VideoTags(models.Model):
     title = models.CharField(verbose_name=_('Title'), max_length=255, null=True, blank=True)
 
+    def __str__(self):
+        return self.title
+
 
 class VideoMood(models.Model):
     title = models.CharField(verbose_name=_('Title'), max_length=255, null=True, blank=True)
+    
+    def __str__(self):
+        return self.title
 
 
 class VideoGenre(models.Model):
     title = models.CharField(verbose_name=_('Title'), max_length=255, null=True, blank=True)
+
+    def __str__(self):
+        return self.title
 
 
 class Music(models.Model):
@@ -25,10 +34,13 @@ class Music(models.Model):
     video_length = models.PositiveIntegerField(verbose_name=_('Video Length'))
 
     description = models.TextField(verbose_name=_('Description'), null=True, blank=True)
-    tags = models.ManyToManyField(verbose_name=_('Tags'), to='music.VideoTags', related_name='videos')
+    tags = models.ManyToManyField(verbose_name=_('Tags'), to='music.VideoTags', related_name='videos', blank=True)
 
     custom_rating = models.DecimalField(verbose_name=_('Custom Rating'), null=True, blank=True, max_digits=6,
                                         decimal_places=3)
 
-    mood = models.ManyToManyField(verbose_name=_('Mood'), to='music.VideoMood', related_name='videos')
-    genre = models.ManyToManyField(verbose_name=_('Genre'), to='music.VideoGenre', related_name='videos')
+    mood = models.ManyToManyField(verbose_name=_('Mood'), to='music.VideoMood', related_name='videos', blank=True)
+    genre = models.ManyToManyField(verbose_name=_('Genre'), to='music.VideoGenre', related_name='videos', blank=True)
+
+    def __str__(self):
+        return self.title
