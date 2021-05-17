@@ -4,8 +4,8 @@ from music.models import Music
 
 
 class MusicFilter(filters.FilterSet):
-    video_id = filters.CharFilter(field_name='video_id', lookup_expr='exact')
+    channel_id = filters.CharFilter(field_name='channel_id', lookup_expr='exact')
 
     class Meta:
         model = Music
-        fields = ['video_id']
+        fields = ['channel_id']
