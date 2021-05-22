@@ -18,8 +18,10 @@ def fetchData(URL, params):
 
 
 def parseTime(time):
+    if 'DT' in time:
+        return 0
     time = time.replace('S', '')
-    time = time.replace('PD', '')
+    time = time.replace('PT', '')
     seconds = time.split('M')[1]
     if 'H' in time:
         minutes = time.split('M')[0].split('H')[1]
@@ -59,9 +61,9 @@ class channelVideo:
             if search_result['id']['kind'] == 'youtube#video':
                 self.videos['video_id'].append(search_result['id']['videoId'])
                 self.videos['title'].append(search_result['snippet']['title'])
-                self.videos['like'].append(search_result['statistics']['likeCount'])
-                self.videos['dislike'].append(search_result['statistics']['dislikeCount'])
-                self.videos['views'].append(search_result['statistics']['viewCount'])
+                self.videos['like'].append(int(search_result['statistics']['likeCount']))
+                self.videos['dislike'].append(int(search_result['statistics']['dislikeCount']))
+                self.videos['views'].append(int(search_result['statistics']['viewCount']))
                 self.videos['video_length'].append(parseTime(search_result['contentDetails']['duration']))
                 self.videos['description'].append(search_result['snippet']['description'])
                 self.videos['tags'].append(search_result['snippet']['tags'])

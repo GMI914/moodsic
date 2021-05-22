@@ -3,21 +3,21 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class VideoTags(models.Model):
-    title = models.CharField(verbose_name=_('Title'), max_length=255, null=True, blank=True)
+    title = models.CharField(verbose_name=_('Title'), max_length=255, null=True, blank=True, unique=True)
 
     def __str__(self):
         return self.title
 
 
 class VideoMood(models.Model):
-    title = models.CharField(verbose_name=_('Title'), max_length=255, null=True, blank=True)
-    
+    title = models.CharField(verbose_name=_('Title'), max_length=255, null=True, blank=True, unique=True)
+
     def __str__(self):
         return self.title
 
 
 class VideoGenre(models.Model):
-    title = models.CharField(verbose_name=_('Title'), max_length=255, null=True, blank=True)
+    title = models.CharField(verbose_name=_('Title'), max_length=255, null=True, blank=True, unique=True)
 
     def __str__(self):
         return self.title
