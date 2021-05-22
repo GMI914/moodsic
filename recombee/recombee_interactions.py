@@ -29,7 +29,7 @@ client.send(AddRating("PrimaryKey1", "PrimaryKey3", rating = 0.6, cascade_create
 # This should be used to rate weather it fits the mood or not and if the musics quality is good
 
 
-#Don’t forget to provide the recommId parameter if the interaction is based on the recommendations. 
+#Donï¿½t forget to provide the recommId parameter if the interaction is based on the recommendations. 
 #It will give you very precise insight into the success of the recommendations in the Admin UI
 
 # When users start sending bad ratings to the music, what we can do is to some time later, we should
