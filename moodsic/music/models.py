@@ -24,7 +24,7 @@ class VideoGenre(models.Model):
 
 
 class Music(models.Model):
-    video_id = models.CharField(verbose_name=_('Video Id'), max_length=11, null=False, blank=False)
+    video_id = models.CharField(verbose_name=_('Video Id'), max_length=11, null=False, blank=False, unique=True)
     channel_id = models.CharField(verbose_name=_('Channel Id'), max_length=255, null=False, blank=False)
     title = models.CharField(verbose_name=_('Title'), max_length=511, null=True, blank=True)
 
