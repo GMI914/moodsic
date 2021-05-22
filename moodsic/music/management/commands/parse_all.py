@@ -3,7 +3,10 @@ from django.core.management import BaseCommand
 from django.core.management import call_command
 
 CHANNEL_IDS = [
-    '',
+    'UCsUeNbrb8t2Td1faP1VbK2g',
+    'UCG6QEHCBfWZOnv7UVxappyw',
+    'UCMOgdURr7d8pOVlc-alkfRg',
+    'UCGwALZJISywbMsd3QPvvrDQ',
 ]
 
 
