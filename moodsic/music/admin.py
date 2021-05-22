@@ -20,7 +20,8 @@ class VideoGenreInline(admin.StackedInline):
 
 @admin.register(Music)
 class MusicAdmin(admin.ModelAdmin):
-    inlines = [VideoTagsInline, VideoMoodInline, VideoGenreInline]
+    pass
+    # inlines = [VideoTagsInline, VideoMoodInline, VideoGenreInline]
 
 
 admin.site.register([VideoTags, VideoMood, VideoGenre])
