@@ -17,7 +17,7 @@ class Command(BaseCommand):
 
         client.send(AddItemProperty("mood", "string"))
         client.send(AddItemProperty("length", "double"))
-        client.send(AddItemProperty("title", "string"))
+        # client.send(AddItemProperty("title", "string"))
         client.send(AddItemProperty("viewCount", "int"))
         client.send(AddItemProperty("likeDislikeRatio", "double"))
-        client.send(AddItemProperty("tags", "set"))
+        # client.send(AddItemProperty("tags", "set"))

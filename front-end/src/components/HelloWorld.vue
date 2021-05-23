@@ -54,14 +54,22 @@ h3 {
     margin: 40px 0 0;
 }
 
+h1 {
+    color: #333;
+    filter: drop-shadow(0 0 9px white);
+}
+
 ul {
     list-style-type: none;
-    padding: 0;
+    background: green;
+    padding: 20px 0;
 }
 
 li {
     display: inline-block;
     margin: 0 10px;
+    color: #333;
+    filter: drop-shadow(0 0 9px white);
 }
 
 a {

@@ -29,8 +29,8 @@ class Command(BaseCommand):
                         "length": music.video_length,
                         "viewCount": music.views,
                         "likeDislikeRatio": ratio,
-                        "title": music.title,
-                        "tags": [tag.title for tag in music.tags.all()]
+                        # "title": music.title,
+                        # "tags": [tag.title for tag in music.tags.all()]
                     },
                     cascade_create=True
                 )
