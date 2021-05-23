@@ -39,3 +39,9 @@ class MusicDetailSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'video_id', 'channel_id', 'title', 'like', 'dislike', 'views', 'video_length', 'description', 'tags',
             'custom_rating', 'mood', 'genre')
+
+
+class MusicCustomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Music
+        fields = ('title', 'video_id')
