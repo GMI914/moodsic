@@ -50,7 +50,10 @@ class MusicViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.Ge
 
     @action(detail=False, pagination_class=SmallResultsSetPagination)
     def custom_list(self, request, *args, **kwargs):
-        result = client.send(RecommendItemsToItem('-jaftVDdlqs', 1, 50, ))
+        if request.GET.get('video_id'):
+            result = client.send(RecommendItemsToItem(request.GET.get('video_id'), 1, 50, ))
+        else:
+            result = client.send(RecommendItemsToItem('02nX4Lh48us', 1, 50, ))
         queryset = Music.objects.filter(video_id__in=[video.get('id') for video in result.get('recomms')])
         serializer = MusicCustomSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
