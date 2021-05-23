@@ -4,10 +4,11 @@
                 :src="`https://www.youtube.com/embed/${playedMusic.video_id}?autoplay=1&origin=http://0.0.0.0:8080`"
                 frameborder="0"></iframe>
         <h1 v-if="playedMusic">{{ playedMusic.title }}</h1>
+        <h1 v-if="playedMusic">{{ playedMusic.views }}</h1>
         <ul>
             <li v-for="(music, index) in musicList" :key="index" @click="nextTrack(music)">{{
                     music.title
-                }}
+                }} | {{ music.views }}
             </li>
         </ul>
     </div>
