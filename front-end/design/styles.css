@@ -1,0 +1,50 @@
+html *
+{
+    font-family: monospace, "Lucida Console" !important; 
+	font-style: oblique;
+	color: #05d9e8;
+}
+
+
+.MainContainer
+{
+    display: grid;
+
+    /*because the .MusicPlayer isn't centered
+        and it doesn't fill up the whole grid
+        it looks weird*/
+    grid-template-columns: 20% 60% 20%;
+    
+}
+
+.MusicPlayer
+{
+    background-color: blue;
+    width: 80px;
+    height: 80px;
+
+    grid-column-start: 2;
+    grid-column-end: 3;
+    justify-self: center;
+}
+
+.LeftRecommendation
+{
+    background-color: green;
+    width: 80px;
+    height: 80px;
+
+    grid-column-start: 1;
+    grid-column-end: 2;
+
+}
+
+.RightRecommendation
+{
+    background-color: red;
+    width: 80px;
+    height: 80px;
+
+    grid-column-start: 3;
+    grid-column-end: 4;
+}
