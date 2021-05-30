@@ -65,7 +65,7 @@ a:hover
     font-size: 30px;
   }
 
-.MusicPlayer
+.center
 {
     background-color: #262626;
 	
@@ -78,6 +78,35 @@ a:hover
         color: #4e4e50;
         box-shadow: 5px 5px 10px 5px rgba(9, 32, 71, 0.6);
 	
+}
+.music-player
+{
+    display:flex;
+    flex-direction:column;
+}
+
+.player-wrapper
+{
+}
+svg
+{
+    background-color: #c3073f;
+    width: 35px;
+    height: 35px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+.actions-wrapper
+{
+    display:flex;
+    flex-direction:row;
+    justify-content: center;
+}
+
+.action-item
+{
+    margin: 5px;
+    align-items:center;
 }
 
 .LeftRecommendation
