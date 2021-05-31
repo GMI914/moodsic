@@ -17,6 +17,8 @@ def fetchData(URL, params):
 
 
 def parseTime(time):
+    if not time:
+        return 0
     if 'D' in time:
         return 0
     time = time.replace('S', '')
@@ -85,12 +87,14 @@ class channelVideo:
         for search_result in search_response.get('items', []):
             if search_result['kind'] == 'youtube#video':
                 video = {
-                    'video_id': search_result['id'], 'title': search_result['snippet']['title'],
+                    'video_id': search_result['id'],
+                    'title': search_result['snippet'].get('title', None),
+                    'image_url': search_result['snippet'].get('thumbnails', {}).get('medium', {}).get('url', None),
                     'like': int(search_result['statistics'].get('likeCount', 0)),
                     'dislike': int(search_result['statistics'].get('dislikeCount', 0)),
                     'views': int(search_result['statistics'].get('viewCount', 0)),
-                    'video_length': parseTime(search_result['contentDetails']['duration']),
-                    'description': search_result['snippet']['description'],
+                    'video_length': parseTime(search_result['contentDetails'].get('duration')),
+                    'description': search_result['snippet'].get('description', ''),
                     'tags': search_result['snippet'].get('tags', [])
                 }
                 self.videos.append(video)
@@ -100,6 +104,7 @@ class channelVideo:
             music, created = Music.objects.update_or_create(video_id=obj.get('video_id'), defaults={
                 'channel_id': self.channel_id,
                 'title': obj.get('title'),
+                'image_url': obj.get('image_url'),
                 'like': obj.get('like'),
                 'dislike': obj.get('dislike'),
                 'views': obj.get('views'),
