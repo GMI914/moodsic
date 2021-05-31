@@ -1,72 +1,87 @@
 <template>
     <div class="MainContainer">
 
-    <div class="LeftRecommendation">
+        <div class="LeftRecommendation">
 
-        <div class="playlist-items">
+            <div class="playlist-items">
 
-            <div class="playlist-item" v-for="(music,index) in MusicList" :key="index">
-                <a @click="NextTrack(music)">
-                    <div class="thumbnail-meta-container">                       
-                        <div class="thumbnail-container">
-                            <img :src="music.image_url"/>
-                        </div>
-                        <div class="meta">
-                            <h4 class="title-style">
+                <div class="playlist-item" v-for="(music,index) in MusicList" :key="index">
+                    <a @click="NextTrack(music)">
+                        <div class="thumbnail-meta-container">
+                            <div class="thumbnail-container">
+                                <img :src="music.image_url"/>
+                            </div>
+                            <div class="meta">
+                                <h4 class="title-style">
                                 <span class="video-title">
-                                    {{music.title}}
+                                    {{ music.title }}
                                 </span>
-                            </h4>
+                                </h4>
+                            </div>
                         </div>
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="center">
+
+            <div class="music-player">
+                <div class="frame-wrapper">
+
+                    <youtube-iframe
+                        :player-width="playerSize / 3"
+                        :player-height="playerSize * 3 / 16"
+                        v-if="CurrentMusic && enablePlayer"
+                        :video-id="CurrentMusic.video_id" @state-change="PlayerStateChange"
+                        @ready="PlayerStateChange()"
+                    ></youtube-iframe>
+                </div>
+                <div class="actions-wrapper">
+                    <div class="action-item">
+                        <svg width="25" height="25"></svg>
                     </div>
-                </a>
-            </div>
-
-        </div>
-        
-    </div>  
-
-    <div class="center">
-
-        <div class="music-player">
-            <div class="frame-wrapper">
-    
-                <youtube-iframe :player-width="450" :player-height="300" v-if="CurrentMusic" :video-id="CurrentMusic.video_id" @state-change="PlayerStateChange" @ready="PlayerStateChange()"></youtube-iframe>
-            </div>
-            <div class="actions-wrapper">
-                <div class="action-item"><svg width="25" height="25"></svg></div>
-                <div class="action-item"><svg width="18" height="16"></svg></div>
-                <div class="action-item"><svg width="18" height="16"></svg></div>
-                <div class="action-item"><svg width="18" height="16"></svg></div>
+                    <div class="action-item">
+                        <svg width="18" height="16"></svg>
+                    </div>
+                    <div class="action-item">
+                        <svg width="18" height="16"></svg>
+                    </div>
+                    <div class="action-item">
+                        <svg width="18" height="16"></svg>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 
 
-    <div class="right-recommend">
-        <div class="playlist-items">
+        <div class="right-recommend">
+            <div class="playlist-items">
 
-            <div class="playlist-item" v-for="(music,index) in MusicList" :key="index">
-                <a @click="NextTrack(music)">
-                    <div class="thumbnail-meta-container">                       
-                        <div class="thumbnail-container">
-                            <img src="http://s29843.pcdn.co/blog/wp-content/uploads/sites/2/2019/06/YouTube-Thumbnail-Sizes.png"/>
-                        </div>
-                        <div class="meta">
-                            <h4 class="title-style">
+                <div class="playlist-item" v-for="(music,index) in MusicList" :key="index">
+                    <a @click="NextTrack(music)">
+                        <div class="thumbnail-meta-container">
+                            <div class="thumbnail-container">
+                                <img
+                                    src="http://s29843.pcdn.co/blog/wp-content/uploads/sites/2/2019/06/YouTube-Thumbnail-Sizes.png"/>
+                            </div>
+                            <div class="meta">
+                                <h4 class="title-style">
                                 <span class="video-title">
-                                    {{music.title}}
+                                    {{ music.title }}
                                 </span>
-                            </h4>
+                                </h4>
+                            </div>
                         </div>
-                    </div>
-                </a>
-            </div>
+                    </a>
+                </div>
 
+            </div>
         </div>
+
     </div>
-    
-</div>
 </template>
 
 <script>
@@ -75,32 +90,48 @@ import {ajax, apiUrls} from "../store/api/urls";
 export default {
     name: 'DesignTest',
     props: {msg: String},
-    data()
-    {
+    data() {
         //Why does the return force me to put the { on the same line?????
-        return{
+        return {
             MusicList: [],
             CurrentMusic: null,
+            screenWidth: 0,
+            enablePlayer: true,
         }
     },
-    methods:
-    {
-        NextTrack(music)
-        {
-            this.CurrentMusic = null,
-            setTimeout(() => {this.CurrentMusic = music},1)
+    methods: {
+        NextTrack(music) {
+            this.CurrentMusic = null
+            setTimeout(() => {
+                this.CurrentMusic = music
+            }, 1)
         },
-        PlayerStateChange(event)
-        {
+        PlayerStateChange(event) {
             console.log(event)
+        },
+        resizeEvent() {
+            this.enablePlayer = false
+            setTimeout(() => {
+                this.enablePlayer = true
+            }, 1)
+            this.screenWidth = window.innerWidth
         }
     },
-    mounted()
-    {
+    computed: {
+        playerSize() {
+            return this.screenWidth ? this.screenWidth : 0
+        },
+    },
+    mounted() {
+        this.screenWidth = window.innerWidth
+        window.addEventListener('resize', this.resizeEvent)
         ajax.get(apiUrls.customMusicList).then(response => {
             this.MusicList = response.data
             this.CurrentMusic = this.MusicList.length ? this.MusicList[0] : null
         })
+    },
+    unmounted() {
+        window.removeEventListener('resize', this.resizeEvent)
     }
 }
 
@@ -116,104 +147,96 @@ Turn dimensions into ratios
 */
 
 
-a
-{
-    cursor:pointer;
+a {
+    cursor: pointer;
     display: block;
-    flex-basis: 1e-09px;
-    
+    flex-basis: 1 e-09px;
+
     /*these two are playing a huge role*/
     flex-grow: 1;
     flex-shrink: 1;
-    
+
     min-width: 0px;
-    text-decoration-color: rgb(3,3,3);
+    text-decoration-color: rgb(3, 3, 3);
     text-size-adjust: 100%;
 }
 
-a:hover
-{
+a:hover {
     background-color: #254f64;
-	size: 20px;
-	border-radius: 3px;
-	cursor: pointer;
+    size: 20px;
+    border-radius: 3px;
+    cursor: pointer;
 
 }
 
-.MainContainer
-{
-    
+.MainContainer {
+
     display: grid;
     grid-template-areas:
-    'left main right'
-    'left .... right'
-    'left .... right';
-    grid-gap:10px;
-    padding-left:15px;
+    'left main right';
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+    padding-left: 15px;
     padding-right: 15px;
-    
+
     background-color: #1a1a1d;
-    
-	border-radius: 15px;
-	border-left: 5px solid #ff2556;
-	border-right: 5px solid #ff2556;
-	opacity: 0.91;
+
+    border-radius: 15px;
+    border-left: 5px solid #ff2556;
+    border-right: 5px solid #ff2556;
+    opacity: 0.91;
 }
 
 .MainContainer > div {
     text-align: center;
     padding: 20px 0;
     font-size: 30px;
-  }
+}
 
-.center
-{
+.center {
     background-color: #262626;
-	
+
     grid-area: main;
 
-        margin-top: 12px;
-        border-radius: 20px;
-        border-top:6px solid #c3073f; 
-        border-bottom:6px solid #c3073f;
-        color: #4e4e50;
-        box-shadow: 5px 5px 10px 5px rgba(9, 32, 71, 0.6);
-	
-}
-.music-player
-{
-    display:flex;
-    flex-direction:column;
+    margin-top: 12px;
+    border-radius: 20px;
+    border-top: 6px solid #c3073f;
+    border-bottom: 6px solid #c3073f;
+    color: #4e4e50;
+    box-shadow: 5px 5px 10px 5px rgba(9, 32, 71, 0.6);
+
 }
 
-.player-wrapper
-{
+.music-player {
+    display: flex;
+    flex-direction: column;
 }
-svg
-{
+
+.player-wrapper {
+}
+
+svg {
     background-color: #c3073f;
     width: 35px;
     height: 35px;
     border-radius: 20px;
     cursor: pointer;
 }
-.actions-wrapper
-{
-    display:flex;
-    flex-direction:row;
+
+.actions-wrapper {
+    display: flex;
+    flex-direction: row;
     justify-content: center;
 }
 
-.action-item
-{
+.action-item {
     margin: 5px;
-    align-items:center;
+    align-items: center;
 }
 
-.LeftRecommendation
-{
+.LeftRecommendation {
     background-color: #262626;
-	
+
     grid-area: left;
 
     display: flex;
@@ -224,29 +247,28 @@ svg
     margin-bottom: 24px;
 
     border-radius: 20px;
-	border-top:6px solid #c3073f; 
-	border-bottom:6px solid #c3073f;
-	color: #4e4e50;
-	box-shadow: 5px 5px 10px 5px rgba(9, 32, 71, 0.6);
+    border-top: 6px solid #c3073f;
+    border-bottom: 6px solid #c3073f;
+    color: #4e4e50;
+    box-shadow: 5px 5px 10px 5px rgba(9, 32, 71, 0.6);
 
-	
+
 }
-.playlist-items::-webkit-scrollbar
-{
+
+.playlist-items::-webkit-scrollbar {
     width: 5px;
 }
-.playlist-items::-webkit-scrollbar-thumb
-{ 
+
+.playlist-items::-webkit-scrollbar-thumb {
     background-color: #c3073f;
 }
 
-.playlist-items::-webkit-scrollbar-track
-{
-        background-color: #262626;
-}  
-.right-recommend
-{
-    background-color: #262626;	
+.playlist-items::-webkit-scrollbar-track {
+    background-color: #262626;
+}
+
+.right-recommend {
+    background-color: #262626;
 
     grid-area: right;
 
@@ -258,26 +280,24 @@ svg
     margin-bottom: 24px;
 
     border-radius: 20px;
-	border-top:6px solid #c3073f; 
-	border-bottom:6px solid #c3073f;
-	color: #4e4e50;
-	box-shadow: 5px 5px 10px 5px rgba(9, 32, 71, 0.6);
+    border-top: 6px solid #c3073f;
+    border-bottom: 6px solid #c3073f;
+    color: #4e4e50;
+    box-shadow: 5px 5px 10px 5px rgba(9, 32, 71, 0.6);
 
 }
 
-.playlist-items
-{
+.playlist-items {
 
     overflow-y: auto;
     margin: 0 0 0 0;
     height: 363px;
-    font-size:10px;
+    font-size: 10px;
     display: block;
     text-size-adjust: 100%;
 }
 
-.playlist-item
-{
+.playlist-item {
     display: flex;
     flex-direction: row;
     font-size: 10px;
@@ -285,8 +305,7 @@ svg
     padding: 4px 8px 0px 4px;
 }
 
-.thumbnail-meta-container
-{
+.thumbnail-meta-container {
     /*These two also play a part*/
     display: flex;
     flex-direction: row;
@@ -295,24 +314,22 @@ svg
     padding: 0 0 0 0;
 }
 
-.thumbnail-container
-{
+.thumbnail-container {
     display: block;
     overflow-x: hidden;
     overflow-y: hidden;
     text-align: center;
-    
-    width:100px;
+
+    width: 100px;
     height: 56px;
     flex-basis: auto;
     flex-grow: 0;
     flex-shrink: 0;
 }
 
-.thumbnail-container img
-{
+.thumbnail-container img {
     height: 100%;
-    
+
     /*
     These need further work
     transform: translateY(-50%);
@@ -321,8 +338,7 @@ svg
     */
 }
 
-.meta
-{
+.meta {
     min-width: 0;
     padding: 0 8px;
     display: flex;
@@ -331,9 +347,8 @@ svg
     flex: 1;
 }
 
-.title-style
-{
-    display:block;
+.title-style {
+    display: block;
     cursor: pointer;
     margin: 0 0 0 0;
     padding: 0 0 0 0;
@@ -349,12 +364,11 @@ svg
     */
 }
 
-.video-title
-{
-   display: -webkit-box;
-   -webkit-box-orient: vertical;
-   -webkit-line-clamp: 2;
-    overflow:hidden;
+.video-title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
 
     /*
     this puts dots(...) after the text if it overflows
@@ -362,15 +376,15 @@ svg
     */
     text-overflow: ellipsis;
 
-    
-   margin: 0 0 4px 0;
-   padding: 0;
 
-   
-   font-size: 14px;
-   font-weight: 500;
-   text-decoration-thickness: initial;
-   white-space: normal;
+    margin: 0 0 4px 0;
+    padding: 0;
+
+
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration-thickness: initial;
+    white-space: normal;
 }
 
 </style>
