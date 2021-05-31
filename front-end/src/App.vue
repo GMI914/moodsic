@@ -18,8 +18,7 @@ html *
     font-family: monospace, "Lucida Console" !important; 
 	font-style: oblique;
 	color: #05d9e8;
-}
-
+}  
 body
 {
     background-color:#262626

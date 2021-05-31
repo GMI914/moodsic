@@ -9,7 +9,7 @@
                 <a @click="NextTrack(music)">
                     <div class="thumbnail-meta-container">                       
                         <div class="thumbnail-container">
-                            <img src="http://s29843.pcdn.co/blog/wp-content/uploads/sites/2/2019/06/YouTube-Thumbnail-Sizes.png"/>
+                            <img :src="music.image_url"/>
                         </div>
                         <div class="meta">
                             <h4 class="title-style">
@@ -30,9 +30,8 @@
 
         <div class="music-player">
             <div class="frame-wrapper">
-                <iframe width="420" height="315" v-if="CurrentMusic"
-                    :src="`https://www.youtube.com/embed/${CurrentMusic.video_id}?autoplay=1&origin=http://0.0.0.0:8080`"> 
-                </iframe>
+    
+                <youtube-iframe :player-width="450" :player-height="300" v-if="CurrentMusic" :video-id="CurrentMusic.video_id" @state-change="PlayerStateChange" @ready="PlayerStateChange()"></youtube-iframe>
             </div>
             <div class="actions-wrapper">
                 <div class="action-item"><svg width="25" height="25"></svg></div>
@@ -90,6 +89,10 @@ export default {
         {
             this.CurrentMusic = null,
             setTimeout(() => {this.CurrentMusic = music},1)
+        },
+        PlayerStateChange(event)
+        {
+            console.log(event)
         }
     },
     mounted()
@@ -146,7 +149,9 @@ a:hover
     'left .... right'
     'left .... right';
     grid-gap:10px;
-
+    padding-left:15px;
+    padding-right: 15px;
+    
     background-color: #1a1a1d;
     
 	border-radius: 15px;
@@ -226,7 +231,19 @@ svg
 
 	
 }
+.playlist-items::-webkit-scrollbar
+{
+    width: 5px;
+}
+.playlist-items::-webkit-scrollbar-thumb
+{ 
+    background-color: #c3073f;
+}
 
+.playlist-items::-webkit-scrollbar-track
+{
+        background-color: #262626;
+}  
 .right-recommend
 {
     background-color: #262626;	
@@ -283,7 +300,7 @@ svg
     display: block;
     overflow-x: hidden;
     overflow-y: hidden;
- 
+    text-align: center;
     
     width:100px;
     height: 56px;
@@ -294,7 +311,7 @@ svg
 
 .thumbnail-container img
 {
-    width: 100%;
+    height: 100%;
     
     /*
     These need further work

@@ -1,4 +1,8 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 
-createApp(App).mount('#app')
+import YoutubeIframe from '@techassi/vue-youtube-iframe'
+const app = createApp(App)
+
+app.use(YoutubeIframe)
+app.mount('#app')
