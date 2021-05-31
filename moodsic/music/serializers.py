@@ -44,4 +44,4 @@ class MusicDetailSerializer(serializers.ModelSerializer):
 class MusicCustomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Music
-        fields = ('title', 'video_id')
+        fields = ('title', 'video_id', 'views')

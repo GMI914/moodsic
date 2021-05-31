@@ -17,7 +17,7 @@ class Command(BaseCommand):
                 SetUserValues(
                     user.id,
                     {
-                        "username": user.email,
+                        "username": user.username,
                         "age": 22,
                     }
                     , cascade_create=True

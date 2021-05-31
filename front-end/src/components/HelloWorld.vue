@@ -4,10 +4,11 @@
                 :src="`https://www.youtube.com/embed/${playedMusic.video_id}?autoplay=1&origin=http://0.0.0.0:8080`"
                 frameborder="0"></iframe>
         <h1 v-if="playedMusic">{{ playedMusic.title }}</h1>
+        <h1 v-if="playedMusic">{{ playedMusic.views }}</h1>
         <ul>
             <li v-for="(music, index) in musicList" :key="index" @click="nextTrack(music)">{{
                     music.title
-                }}
+                }} | {{ music.views }}
             </li>
         </ul>
     </div>
@@ -53,14 +54,22 @@ h3 {
     margin: 40px 0 0;
 }
 
+h1 {
+    color: #333;
+    filter: drop-shadow(0 0 9px white);
+}
+
 ul {
     list-style-type: none;
-    padding: 0;
+    background: green;
+    padding: 20px 0;
 }
 
 li {
     display: inline-block;
     margin: 0 10px;
+    color: #333;
+    filter: drop-shadow(0 0 9px white);
 }
 
 a {

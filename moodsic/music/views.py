@@ -3,7 +3,7 @@ from collections import OrderedDict
 from django_filters.rest_framework import DjangoFilterBackend
 from typing import List
 
-from recombee_api_client.api_requests import RecommendItemsToItem
+from recombee_api_client.api_requests import RecommendItemsToItem, AddRating, RecommendItemsToUser
 from rest_framework import viewsets, mixins, status
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.pagination import PageNumberPagination
@@ -51,9 +51,8 @@ class MusicViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.Ge
     @action(detail=False, pagination_class=SmallResultsSetPagination)
     def custom_list(self, request, *args, **kwargs):
         if request.GET.get('video_id'):
-            result = client.send(RecommendItemsToItem(request.GET.get('video_id'), 1, 50, ))
-        else:
-            result = client.send(RecommendItemsToItem('02nX4Lh48us', 1, 50, ))
+            client.send(AddRating(1, request.GET.get('video_id'), rating=-1, cascade_create=None))
+        result = client.send(RecommendItemsToUser(2, 20, scenario='music_main'))
         queryset = Music.objects.filter(video_id__in=[video.get('id') for video in result.get('recomms')])
         serializer = MusicCustomSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
