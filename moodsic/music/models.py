@@ -27,6 +27,7 @@ class Music(models.Model):
     video_id = models.CharField(verbose_name=_('Video Id'), max_length=11, null=False, blank=False, unique=True)
     channel_id = models.CharField(verbose_name=_('Channel Id'), max_length=255, null=False, blank=False)
     title = models.CharField(verbose_name=_('Title'), max_length=511, null=True, blank=True)
+    image_url = models.CharField(verbose_name=_('Image Url'), max_length=511, null=True, blank=True)
 
     like = models.PositiveIntegerField(verbose_name=_('Like Count'), default=0)
     dislike = models.PositiveIntegerField(verbose_name=_('Dislike Count'), default=0)
