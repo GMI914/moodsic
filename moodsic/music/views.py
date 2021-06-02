@@ -50,34 +50,38 @@ class MusicViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.Ge
         'retrieve': MusicDetailSerializer
     }
 
-    @staticmethod
-    def reorder(result):
-        results = result.get('recomms')
-        random.shuffle(results)
+    def reorder(self, result):
+        results = self.cut_size(result)
         preserved = Case(*[When(video_id=pk.get('id'), then=pos) for pos, pk in enumerate(results)])
         queryset = Music.objects.filter(video_id__in=[video.get('id') for video in results]).order_by(preserved)
         return queryset
+
+    @staticmethod
+    def cut_size(result):
+        results = result.get('recomms')
+        random.shuffle(results)
+        return results[0: int(len(results) / 10)]
 
     @action(detail=False, pagination_class=SmallResultsSetPagination)
     def item_to_user(self, request, *args, **kwargs):
         if request.GET.get('video_id'):
             client.send(AddRating(1, request.GET.get('video_id'), rating=-1, cascade_create=None))
-        result = client.send(RecommendItemsToUser(2, 20, scenario='music_main'))
+        result = client.send(RecommendItemsToUser(2, 200, scenario='music_main'))
         queryset = self.reorder(result)
         serializer = MusicCustomSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, pagination_class=SmallResultsSetPagination)
     def item_to_item(self, request, *args, **kwargs):
-        result = client.send(RecommendItemsToItem(request.GET.get('video_id'), 2, 50, scenario='music_main'))
+        result = client.send(RecommendItemsToItem(request.GET.get('video_id'), 2, 500, scenario='music_main'))
         queryset = self.reorder(result)
         serializer = MusicCustomSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, pagination_class=SmallResultsSetPagination)
     def item_to_item_user_selected(self, request, *args, **kwargs):
-        result_1 = client.send(RecommendItemsToItem(request.GET.get('video_id'), 2, 20, scenario='music_main'))
-        result_2 = client.send(RecommendItemsToUser(2, 20, scenario='music_main'))
+        result_1 = client.send(RecommendItemsToItem(request.GET.get('video_id'), 2, 200, scenario='music_main'))
+        result_2 = client.send(RecommendItemsToUser(2, 200, scenario='music_main'))
         result = {'recomms': result_1.get('recomms', []) + result_2.get('recomms', [])}
         queryset = self.reorder(result)
         serializer = MusicCustomSerializer(queryset, many=True)
