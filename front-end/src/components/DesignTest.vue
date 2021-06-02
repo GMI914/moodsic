@@ -6,7 +6,7 @@
             <div class="playlist-items">
 
                 <div class="playlist-item" v-for="(music,index) in ItemToUserList" :key="index">
-                    <a @click="NextTrack(music)">
+                    <a @click="SelectItemToUser(music)">
                         <div class="thumbnail-meta-container">
                             <div class="thumbnail-container">
                                 <img :src="music.image_url"/>
@@ -32,11 +32,14 @@
                 <div class="frame-wrapper">
 
                     <youtube-iframe
+                        ref="player"
+                        :noCookie="true"
+                        :playerParameters="playerParameters"
                         :player-width="playerSize / 3"
                         :player-height="playerSize * 3 / 16"
                         v-if="CurrentMusic && enablePlayer"
                         :video-id="CurrentMusic.video_id" @state-change="PlayerStateChange"
-                        @ready="PlayerStateChange()"
+                        @ready="playerReady"
                     ></youtube-iframe>
                 </div>
                 <div class="actions-wrapper">
@@ -61,7 +64,7 @@
             <div class="playlist-items">
 
                 <div class="playlist-item" v-for="(music,index) in ItemToItemList" :key="index">
-                    <a @click="NextTrack(music)">
+                    <a @click="SelectItemToItem(music)">
                         <div class="thumbnail-meta-container">
                             <div class="thumbnail-container">
                                 <img :src="music.image_url"/>
@@ -100,14 +103,34 @@ export default {
         }
     },
     methods: {
-        NextTrack(music) {
+        SelectItemToUser(music) {
             this.CurrentMusic = null
             setTimeout(() => {
                 this.CurrentMusic = music
+                this.newItemToItemList(music)
             }, 1)
         },
+        SelectItemToItem(music) {
+            this.CurrentMusic = null
+            setTimeout(() => {
+                this.CurrentMusic = music
+                this.newItemToItemList(music)
+            }, 1)
+            ajax.get(apiUrls.itemToItemUserSelectedMusicList, {params: {video_id: music.video_id}}).then(response => {
+                this.ItemToUserList = response.data
+                this.ItemToUserList.filter(el => el.video_id === music.video_id)
+                this.ItemToUserList.unshift(music)
+            })
+        },
         PlayerStateChange(event) {
-            console.log(event)
+            if (event && event.data === 0) {
+                const index = this.ItemToUserList.findIndex(el => {
+                    return el.video_id === this.CurrentMusic.video_id
+                })
+                if (this.ItemToUserList.length > index + 1) {
+                    this.SelectItemToUser(this.ItemToUserList[index + 1])
+                }
+            }
         },
         resizeEvent() {
             this.enablePlayer = false
@@ -115,25 +138,37 @@ export default {
                 this.enablePlayer = true
             }, 1)
             this.screenWidth = window.innerWidth
+        },
+        newItemToItemList(item) {
+            ajax.get(apiUrls.itemToItemMusicList, {params: {video_id: item.video_id}}).then(response => {
+                this.ItemToItemList = response.data
+            })
+        },
+        playerReady() {
+            this.$refs.player.unMute()
+        },
+        getInitialData() {
+            ajax.get(apiUrls.itemToUserMusicList).then(response => {
+                this.ItemToUserList = response.data
+                this.CurrentMusic = this.ItemToUserList.length ? this.ItemToUserList[0] : null
+                if (this.CurrentMusic) {
+                    this.newItemToItemList(this.CurrentMusic)
+                }
+            })
         }
     },
     computed: {
         playerSize() {
             return this.screenWidth ? this.screenWidth : 0
         },
+        playerParameters() {
+            return {autoplay: 1}
+        }
     },
     mounted() {
         this.screenWidth = window.innerWidth
         window.addEventListener('resize', this.resizeEvent)
-        ajax.get(apiUrls.itemToUserMusicList).then(response => {
-            this.ItemToUserList = response.data
-            this.CurrentMusic = this.ItemToUserList.length ? this.ItemToUserList[0] : null
-            if (this.CurrentMusic) {
-                ajax.get(apiUrls.itemToItemMusicList, {params: {video_id: this.CurrentMusic.video_id}}).then(response => {
-                    this.ItemToItemList = response.data
-                })
-            }
-        })
+        this.getInitialData()
     },
     unmounted() {
         window.removeEventListener('resize', this.resizeEvent)
