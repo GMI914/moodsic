@@ -7,6 +7,11 @@ CHANNEL_IDS = [
     'UCG6QEHCBfWZOnv7UVxappyw',
     'UCMOgdURr7d8pOVlc-alkfRg',
     'UCGwALZJISywbMsd3QPvvrDQ',
+    'UC5nc_ZtjKW1htCVZVRxlQAQ',
+    'UC2Qw1dzXDBAZPwS7zm37g8g',
+    'UCXzmcdy3BVCnLqwOx2JERMg',
+    'UCsCvV28lBfmMxZtnxty-UpA',
+    'UCSa8IUd1uEjlREMa21I3ZPQ',
 ]
 
 

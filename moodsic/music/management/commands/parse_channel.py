@@ -21,6 +21,8 @@ def parseTime(time):
         return 0
     if 'D' in time:
         return 0
+    if 'H' in time:
+        return 0
     time = time.replace('S', '')
     time = time.replace('PT', '')
     if 'M' in time:
@@ -56,8 +58,8 @@ class channelVideo:
 
     def parse_videos(self):
         for video_id in self.video_ids:
-            if Music.objects.filter(video_id=video_id).get():
-                continue
+            # if Music.objects.filter(video_id=video_id).get():
+            #     continue
             print(f'parsing video - {video_id}')
             params = {
                 'part': 'id,snippet,statistics,contentDetails',

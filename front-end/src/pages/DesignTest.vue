@@ -52,22 +52,24 @@
         </div>
         <div class="right-recommend">
             <div class="playlist-items">
-                <div class="playlist-item" v-for="(music,index) in ItemToUserList" :key="index">
-                    <a @click="SelectItemToUser(music)">
-                        <div class="thumbnail-meta-container">
-                            <div class="thumbnail-container">
-                                <img :src="music.image_url"/>
-                            </div>
-                            <div class="meta">
-                                <h4 class="title-style">
+                <template v-for="(music,index) in ItemToUserList">
+                    <div class="playlist-item" v-if="music.image_url" :key="index">
+                        <a @click="SelectItemToUser(music)">
+                            <div class="thumbnail-meta-container">
+                                <div class="thumbnail-container">
+                                    <img :src="music.image_url"/>
+                                </div>
+                                <div class="meta">
+                                    <h4 class="title-style">
                                 <span class="video-title">
                                     {{ music.title }}
                                 </span>
-                                </h4>
+                                    </h4>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
+                        </a>
+                    </div>
+                </template>
             </div>
         </div>
         <div class="bottom-listing">
@@ -118,6 +120,7 @@ export default {
             this.CurrentMusic = null
             setTimeout(() => {
                 this.CurrentMusic = music
+                this.$router.push({query: {music_id: music.video_id}})
                 this.newItemToItemList(music)
             }, 1)
         },
@@ -125,6 +128,7 @@ export default {
             this.CurrentMusic = null
             setTimeout(() => {
                 this.CurrentMusic = music
+                this.$router.push({query: {music_id: music.video_id}})
                 this.newItemToItemList(music)
             }, 1)
             ajax.get(apiUrls.itemToItemUserSelectedMusicList, {params: {video_id: music.video_id}}).then(response => {
@@ -163,6 +167,7 @@ export default {
                 this.ItemToUserList = response.data
                 this.CurrentMusic = this.ItemToUserList.length ? this.ItemToUserList[0] : null
                 if (this.CurrentMusic) {
+                    this.$router.push({query: {music_id: this.CurrentMusic.video_id}})
                     this.newItemToItemList(this.CurrentMusic)
                 }
             })
@@ -178,12 +183,21 @@ export default {
     },
     mounted() {
         this.screenWidth = window.innerWidth
-        // window.addEventListener('resize', this.resizeEvent)
-        this.getInitialData()
+        const music_id = this.$route.query.music_id
+        if (music_id) {
+            this.SelectItemToItem({video_id: music_id})
+        } else {
+            this.getInitialData()
+        }
     },
-    // unmounted() {
-    //     window.removeEventListener('resize', this.resizeEvent)
-    // }
+    watch: {
+        $route(route) {
+            const music_id = route.query.music_id
+            if (!this.CurrentMusic && music_id || music_id && music_id !== this.CurrentMusic.video_id) {
+                this.SelectItemToItem({video_id: music_id})
+            }
+        }
+    }
 }
 
 </script>
