@@ -212,8 +212,7 @@ a:hover {
     flex-direction: column;
 }
 
-.player-wrapper {
-}
+
 
 svg {
     background-color: #c3073f;

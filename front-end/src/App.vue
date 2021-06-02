@@ -1,14 +1,10 @@
 <template>
-    <DesignTest msg="Hello" />
+    <router-view/>    
 </template>
 
 <script>
-import DesignTest from './components/DesignTest.vue'
 export default {
-    name: 'App',
-    components: {
-        DesignTest
-    }
+    name: 'App',  
 }
 </script>
 
