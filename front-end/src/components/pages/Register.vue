@@ -8,14 +8,16 @@
       <div class="wrapper">
         <form class="login" action="server/login.php" method="post">
           <fieldset>
-            <legend>Login</legend>
-            <p>email</p>
+            <legend>Register</legend>
+            <p>Username</p>
+            <input type="text" name="user-name" />
+            <p>Email</p>
             <input type="text" name="email" />
-            <p>password</p>
+            <p>Password</p>
             <input type="password" name="password" />
+            <p>Repeat Password</p>
+            <input type="password" name="password-confirm" />
             <input type="submit" value="Proceed!" />
-            <legend>If you are not registered</legend>
-            <router-link :to="{name:'register'}">Register</router-link>
           </fieldset>
         </form>
       </div>
@@ -77,18 +79,6 @@ input[type="submit"] {
   cursor: pointer;
   margin: 7px;
 }
-
-a{
-   
-  background-color: #c3073f;
-  color: white;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin: 7px;
-}
-
 
 form {
   margin: 0 auto;
