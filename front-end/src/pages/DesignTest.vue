@@ -178,12 +178,12 @@ export default {
     },
     mounted() {
         this.screenWidth = window.innerWidth
-        window.addEventListener('resize', this.resizeEvent)
+        // window.addEventListener('resize', this.resizeEvent)
         this.getInitialData()
     },
-    unmounted() {
-        window.removeEventListener('resize', this.resizeEvent)
-    }
+    // unmounted() {
+    //     window.removeEventListener('resize', this.resizeEvent)
+    // }
 }
 
 </script>
