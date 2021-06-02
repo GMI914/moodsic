@@ -1,36 +1,28 @@
 <template>
     <div class="MainContainer">
-
         <div class="LeftRecommendation">
-
-            <div class="playlist-items">
-
-                <div class="playlist-item" v-for="(music,index) in ItemToUserList" :key="index">
-                    <a @click="SelectItemToUser(music)">
-                        <div class="thumbnail-meta-container">
-                            <div class="thumbnail-container">
-                                <img :src="music.image_url"/>
-                            </div>
-                            <div class="meta">
-                                <h4 class="title-style">
-                                <span class="video-title">
-                                    {{ music.title }}
-                                </span>
-                                </h4>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
+            <Ghost></Ghost>
+            <div class="question-box">
+                <p>How would you <br> describe the song?</p>
+                <ul>
+                    <label>
+                        <li><input name="describe the song" type='radio'>
+                            <i>Good</i></li>
+                    </label>
+                    <label>
+                        <li><input name="describe the song" type='radio'>
+                            <i>Bad</i></li>
+                    </label>
+                    <label>
+                        <li><input name="describe the song" type='radio'>
+                            <i>Ugly</i></li>
+                    </label>
+                </ul>
             </div>
-
         </div>
-
         <div class="center">
-
             <div class="music-player">
                 <div class="frame-wrapper">
-
                     <youtube-iframe
                         ref="player"
                         :noCookie="true"
@@ -58,11 +50,28 @@
                 </div>
             </div>
         </div>
-
-
         <div class="right-recommend">
             <div class="playlist-items">
-
+                <div class="playlist-item" v-for="(music,index) in ItemToUserList" :key="index">
+                    <a @click="SelectItemToUser(music)">
+                        <div class="thumbnail-meta-container">
+                            <div class="thumbnail-container">
+                                <img :src="music.image_url"/>
+                            </div>
+                            <div class="meta">
+                                <h4 class="title-style">
+                                <span class="video-title">
+                                    {{ music.title }}
+                                </span>
+                                </h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="bottom-listing">
+            <div class="playlist-items">
                 <div class="playlist-item" v-for="(music,index) in ItemToItemList" :key="index">
                     <a @click="SelectItemToItem(music)">
                         <div class="thumbnail-meta-container">
@@ -79,19 +88,21 @@
                         </div>
                     </a>
                 </div>
-
             </div>
         </div>
-
     </div>
 </template>
 
 <script>
 import {ajax, apiUrls} from "../store/api/urls";
+import Ghost from "../components/Ghost";
 
 export default {
     name: 'DesignTest',
     props: {msg: String},
+    components: {
+        Ghost
+    },
     data() {
         //Why does the return force me to put the { on the same line?????
         return {
@@ -190,7 +201,6 @@ Turn dimensions into ratios
 a {
     cursor: pointer;
     display: block;
-    flex-basis: 1 e-09px;
 
     /*these two are playing a huge role*/
     flex-grow: 1;
@@ -213,7 +223,9 @@ a:hover {
 
     display: grid;
     grid-template-areas:
-    'left main right';
+    'head head head'
+    'left main right'
+    'bottom bottom bottom';
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 10px;
     padding-left: 15px;
@@ -425,4 +437,48 @@ svg {
     white-space: normal;
 }
 
+.bottom-listing {
+    grid-area: bottom;
+}
+
+.bottom-listing .playlist-items {
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 400px);
+    justify-content: space-between;
+}
+
+.bottom-listing .playlist-item {
+    min-width: 300px;
+}
+
+.question-box {
+    display: inline-block;
+    font-size: 15px;
+}
+
+ul {
+    list-style-type: katakana-iroha;
+    width: fit-content;
+    margin: 0 auto;
+    text-align: left;
+}
+
+ul li {
+    font-family: monospace, "lucida console";
+    color: #05d9e8;
+}
+
+p, label {
+    font-family: monospace, "Lucida Console";
+    font-style: oblique;
+    color: #05d9e8;
+}
+
+ul li:hover {
+    background-color: #254f64;
+    size: 20px;
+    border-radius: 3px;
+    cursor: pointer;
+}
 </style>
