@@ -5,7 +5,7 @@
 
             <div class="playlist-items">
 
-                <div class="playlist-item" v-for="(music,index) in MusicList" :key="index">
+                <div class="playlist-item" v-for="(music,index) in ItemToUserList" :key="index">
                     <a @click="NextTrack(music)">
                         <div class="thumbnail-meta-container">
                             <div class="thumbnail-container">
@@ -60,12 +60,11 @@
         <div class="right-recommend">
             <div class="playlist-items">
 
-                <div class="playlist-item" v-for="(music,index) in MusicList" :key="index">
+                <div class="playlist-item" v-for="(music,index) in ItemToItemList" :key="index">
                     <a @click="NextTrack(music)">
                         <div class="thumbnail-meta-container">
                             <div class="thumbnail-container">
-                                <img
-                                    src="http://s29843.pcdn.co/blog/wp-content/uploads/sites/2/2019/06/YouTube-Thumbnail-Sizes.png"/>
+                                <img :src="music.image_url"/>
                             </div>
                             <div class="meta">
                                 <h4 class="title-style">
@@ -93,7 +92,8 @@ export default {
     data() {
         //Why does the return force me to put the { on the same line?????
         return {
-            MusicList: [],
+            ItemToUserList: [],
+            ItemToItemList: [],
             CurrentMusic: null,
             screenWidth: 0,
             enablePlayer: true,
@@ -125,9 +125,14 @@ export default {
     mounted() {
         this.screenWidth = window.innerWidth
         window.addEventListener('resize', this.resizeEvent)
-        ajax.get(apiUrls.customMusicList).then(response => {
-            this.MusicList = response.data
-            this.CurrentMusic = this.MusicList.length ? this.MusicList[0] : null
+        ajax.get(apiUrls.itemToUserMusicList).then(response => {
+            this.ItemToUserList = response.data
+            this.CurrentMusic = this.ItemToUserList.length ? this.ItemToUserList[0] : null
+            if (this.CurrentMusic) {
+                ajax.get(apiUrls.itemToItemMusicList, {params: {video_id: this.CurrentMusic.video_id}}).then(response => {
+                    this.ItemToItemList = response.data
+                })
+            }
         })
     },
     unmounted() {
@@ -211,7 +216,6 @@ a:hover {
     display: flex;
     flex-direction: column;
 }
-
 
 
 svg {
