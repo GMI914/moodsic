@@ -35,15 +35,15 @@
                     ></youtube-iframe>
                 </div>
                 <div class="actions-wrapper">
-                    <div class="action-item">
+                    <router-link tag="div" class="action-item" :to="{name: 'question'}">
                         <svg width="25" height="25"></svg>
-                    </div>
-                    <div class="action-item">
+                    </router-link>
+                    <router-link tag="div" class="action-item" :to="{name: 'login'}">
                         <svg width="18" height="16"></svg>
-                    </div>
-                    <div class="action-item">
+                    </router-link>
+                    <router-link tag="div" class="action-item" :to="{name: 'register'}">
                         <svg width="18" height="16"></svg>
-                    </div>
+                    </router-link>
                     <div class="action-item">
                         <svg width="18" height="16"></svg>
                     </div>
@@ -198,7 +198,7 @@ Turn dimensions into ratios
 */
 
 
-a {
+.playlist-item a {
     cursor: pointer;
     display: block;
 
@@ -211,7 +211,7 @@ a {
     text-size-adjust: 100%;
 }
 
-a:hover {
+.playlist-item a:hover {
     background-color: #254f64;
     size: 20px;
     border-radius: 3px;

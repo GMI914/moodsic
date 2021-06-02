@@ -6,11 +6,11 @@ import Register from './pages/Register.vue'
 export const routes = [
     {
         name: 'question',
-        path: '/', component: Questions
+        path: '/questions', component: Questions
     },
     {
         name: 'home',
-        path: '/home', component: DesignTest
+        path: '/', component: DesignTest
     },
     {
         name: 'login',

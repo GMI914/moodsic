@@ -5,7 +5,7 @@
     </head>
     <body>
     <div class="wrapper">
-        <form class="login" action="server/login.php" method="post">
+        <form class="login" method="post">
             <fieldset>
                 <legend>Register</legend>
                 <p>Username</p>
@@ -16,7 +16,7 @@
                 <input type="password" name="password"/>
                 <p>Repeat Password</p>
                 <input type="password" name="password-confirm"/>
-                <input type="submit" value="Proceed!"/>
+                <input type="submit" @submit.prevent="" value="Proceed!"/>
             </fieldset>
         </form>
     </div>
