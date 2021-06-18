@@ -7,6 +7,8 @@ export const ajax = axios.create({
 export const apiUrls = {
     musicList: '/api/music/music/',
     musicDetail: id => `/api/music/music/${id}/`,
-    customMusicList: '/api/music/music/custom_list/',
+    itemToUserMusicList: '/api/music/music/item_to_user/',
+    itemToItemMusicList: '/api/music/music/item_to_item/',
+    itemToItemUserSelectedMusicList: '/api/music/music/item_to_item_user_selected/',
 };
 
