@@ -60,12 +60,12 @@ class MusicViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.Ge
     def list(self, request, *args, **kwargs):
         recombee = Recommendation(
             recom_type=request.GET.get('recom_type', 'itu'),
-            user_id=request.GET.get('user_id', 0),
+            user_id=request.GET.get('user_id', 2),
             item_id=request.GET.get('item_id', 0),
             scenario=request.GET.get('scenario', 'main'),
             r_filter=request.GET.get('r_filter', 'empty'),
             booster=request.GET.get('booster', 'empty'),
-            number_of_items=request.GET.get('number_of_items', 5),
+            number_of_items=int(request.GET.get('number_of_items', 10)),
         )
         result = recombee.get_result()
         queryset = self.reorder(result)

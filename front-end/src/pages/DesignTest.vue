@@ -131,7 +131,14 @@ export default {
                 this.$router.push({query: {music_id: music.video_id}})
                 this.newItemToItemList(music)
             }, 1)
-            ajax.get(apiUrls.itemToItemUserSelectedMusicList, {params: {video_id: music.video_id}}).then(response => {
+            ajax.get(apiUrls.musicList, {
+                params: {
+                    recom_type: 'itius',
+                    // user_id: null,
+                    item_id: music.video_id,
+                    number_of_items: 20,
+                }
+            }).then(response => {
                 this.ItemToUserList = response.data
                 this.ItemToUserList.filter(el => el.video_id === music.video_id)
                 this.ItemToUserList.unshift(music)
@@ -155,7 +162,13 @@ export default {
             this.screenWidth = window.innerWidth
         },
         newItemToItemList(item) {
-            ajax.get(apiUrls.itemToItemMusicList, {params: {video_id: item.video_id}}).then(response => {
+            ajax.get(apiUrls.musicList, {
+                params: {
+                    recom_type: 'iti',
+                    item_id: item.video_id,
+                    number_of_items: 50,
+                }
+            }).then(response => {
                 this.ItemToItemList = response.data
             })
         },
@@ -163,7 +176,13 @@ export default {
             this.$refs.player.unMute()
         },
         getInitialData() {
-            ajax.get(apiUrls.itemToUserMusicList).then(response => {
+            ajax.get(apiUrls.musicList, {
+                params: {
+                    recom_type: 'itu',
+                    // user_id: null,
+                    number_of_items: 20,
+                }
+            }).then(response => {
                 this.ItemToUserList = response.data
                 this.CurrentMusic = this.ItemToUserList.length ? this.ItemToUserList[0] : null
                 if (this.CurrentMusic) {

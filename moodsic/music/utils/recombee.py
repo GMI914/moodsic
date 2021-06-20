@@ -7,12 +7,12 @@ client = RecombeeClient('moodsic-dev', 'Pb4MhOK6751HmdEGmvISdFJqXjLDWEtVkyb2AIY4
 class Recommendation:
     # this is caught from the front
     boosters = {
-        "empty": "",
+        "empty": None,
         "booster_for_happy": "if a then b",
         "booster_for_sad": "if b then a",
     }
     filters = {
-        "empty": "",
+        "empty": None,
         "preference_filter1": "filter by some value",
         "preference_filter2": "filter by some value",
     }
@@ -28,7 +28,7 @@ class Recommendation:
                  scenario="main",
                  r_filter="empty",
                  booster="empty",
-                 number_of_items=5
+                 number_of_items=10
                  ):
         self.user_id = user_id
         self.item_id = item_id
@@ -41,12 +41,20 @@ class Recommendation:
     def get_result(self):
         if self.recom_type == "itu":
             return client.send(RecommendItemsToUser(
-                self.user_id, self.number_of_items, scenario=self.scenario, cascade_create=False,
+                user_id=self.user_id, count=self.number_of_items, scenario=self.scenario, cascade_create=False,
                 filter=self.r_filter, booster=self.booster))
         elif self.recom_type == "iti":
             return client.send(RecommendItemsToItem(
-                self.item_id, self.user_id, self.number_of_items, scenario=self.scenario,
+                item_id=self.item_id, target_user_id=self.user_id, count=self.number_of_items, scenario=self.scenario,
                 cascade_create=False, filter=self.r_filter, booster=self.booster))
+        elif self.recom_type == "itius":
+            result_1 = client.send(RecommendItemsToItem(
+                item_id=self.item_id, target_user_id=self.user_id, count=self.number_of_items, scenario=self.scenario,
+                cascade_create=False, filter=self.r_filter, booster=self.booster))
+            result_2 = client.send(RecommendItemsToUser(
+                user_id=self.user_id, count=self.number_of_items, scenario=self.scenario, cascade_create=False,
+                filter=self.r_filter, booster=self.booster))
+            return {'recomms': result_1.get('recomms', []) + result_2.get('recomms', [])}
 
     def add_rating(self, rating):
         # rating [-1;1]
