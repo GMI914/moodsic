@@ -26,7 +26,7 @@ SECRET_KEY = '#eewy%^85s-tzhg%g8zi%sed@k(-k3s)6z&20=^(7(zs%xe_9j'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0',]
+ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', ]
 
 # Application definition
 
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Packages
     'rest_framework',
+    'rest_framework.authtoken',
     'versatileimagefield',
     'ckeditor',
     'django_filters',
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
     'corsheaders',
     # Apps
     'music',
+    'user',
 ]
 
 MIDDLEWARE = [
@@ -166,3 +168,5 @@ INTERNAL_IPS = [
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+AUTH_USER_MODEL = 'user.User'
