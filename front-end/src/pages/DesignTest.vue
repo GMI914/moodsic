@@ -3,19 +3,22 @@
         <div class="LeftRecommendation">
             <Ghost></Ghost>
             <div class="question-box">
-                <p>How would you <br> describe the song?</p>
+                <p>
+                    How would you <br/>
+                    describe the song?
+                </p>
                 <ul>
                     <label>
-                        <li><input name="describe the song" type='radio'>
-                            <i>Good</i></li>
+                        <li><input name="describe the song" type="radio"/> <i>Happy</i></li>
                     </label>
                     <label>
-                        <li><input name="describe the song" type='radio'>
-                            <i>Bad</i></li>
+                        <li><input name="describe the song" type="radio"/> <i>Cheerful</i></li>
                     </label>
                     <label>
-                        <li><input name="describe the song" type='radio'>
-                            <i>Ugly</i></li>
+                        <li><input name="describe the song" type="radio"/> <i>Gloomy</i></li>
+                    </label>
+                    <label>
+                        <li><input name="describe the song" type="radio"/> <i>Sad</i></li>
                     </label>
                 </ul>
             </div>
@@ -28,53 +31,93 @@
                         :noCookie="true"
                         :playerParameters="playerParameters"
                         :player-width="playerSize / 3"
-                        :player-height="playerSize * 3 / 16"
+                        :player-height="(playerSize * 3) / 16"
                         v-if="CurrentMusic && enablePlayer"
-                        :video-id="CurrentMusic.video_id" @state-change="PlayerStateChange"
+                        :video-id="CurrentMusic.video_id"
+                        @state-change="PlayerStateChange"
                         @ready="playerReady"
                     ></youtube-iframe>
                 </div>
                 <div class="actions-wrapper">
-                    <router-link tag="div" class="action-item" :to="{name: 'question'}">
-                        <svg width="25" height="25"></svg>
+                    <router-link tag="div" class="action-item" :to="{ name: 'question' }">
+                        <svg></svg>
                     </router-link>
-                    <router-link tag="div" class="action-item" :to="{name: 'login'}">
-                        <svg width="18" height="16"></svg>
+                    <router-link tag="div" class="action-item" :to="{ name: 'login' }">
+                        <svg></svg>
                     </router-link>
-                    <router-link tag="div" class="action-item" :to="{name: 'register'}">
-                        <svg width="18" height="16"></svg>
-                    </router-link>
-                    <div class="action-item">
-                        <svg width="18" height="16"></svg>
+                    <div class="action-item" @click="AddToPlaylist">
+                        <svg></svg>
+                    </div>
+                    <div class="action-item" @click="Share">
+                        <img src="../assets/share.svg"/>
                     </div>
                 </div>
             </div>
         </div>
         <div class="right-recommend">
+            <div class="tabs">
+                <div
+                    class="tab-recomended"
+                    @click="ChangeTab"
+                    :class="{ active: IsTabActive }"
+                ></div>
+                <div
+                    class="tab-favorite"
+                    @click="ChangeTab"
+                    :class="{ active: !IsTabActive }"
+                ></div>
+            </div>
             <div class="playlist-items">
-                <template v-for="(music,index) in ItemToUserList">
-                    <div class="playlist-item" v-if="music.image_url" :key="index">
-                        <a @click="SelectItemToUser(music)">
-                            <div class="thumbnail-meta-container">
-                                <div class="thumbnail-container">
-                                    <img :src="music.image_url"/>
+                <template v-if="IsTabActive">
+                    <template v-for="(music, index) in ItemToUserList">
+                        <div class="playlist-item" v-if="music.image_url" :key="index">
+                            <a @click="SelectItemToUser(music)">
+                                <div class="thumbnail-meta-container">
+                                    <div class="thumbnail-container">
+                                        <img :src="music.image_url"/>
+                                    </div>
+                                    <div class="meta">
+                                        <h4 class="title-style">
+                        <span class="video-title">
+                        {{ music.title }}
+                        </span>
+                                        </h4>
+                                    </div>
                                 </div>
-                                <div class="meta">
-                                    <h4 class="title-style">
-                                <span class="video-title">
-                                    {{ music.title }}
-                                </span>
-                                    </h4>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
+                        </div>
+                    </template>
                 </template>
+                <template v-else>
+                    <template v-for="(music, index) in FavoritesList">
+                        <div class="playlist-item" v-if="music.image_url" :key="index">
+                            <a @click="SelectItemToUser(music)">
+                                <div class="thumbnail-meta-container">
+                                    <div class="thumbnail-container">
+                                        <img :src="music.image_url"/>
+                                    </div>
+                                    <div class="meta">
+                                        <h4 class="title-style">
+                        <span class="video-title">
+                        {{ music.title }}
+                        </span>
+                                        </h4>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </template>
+                </template>
+
             </div>
         </div>
         <div class="bottom-listing">
             <div class="playlist-items">
-                <div class="playlist-item" v-for="(music,index) in ItemToItemList" :key="index">
+                <div
+                    class="playlist-item"
+                    v-for="(music, index) in ItemToItemList"
+                    :key="index"
+                >
                     <a @click="SelectItemToItem(music)">
                         <div class="thumbnail-meta-container">
                             <div class="thumbnail-container">
@@ -82,9 +125,9 @@
                             </div>
                             <div class="meta">
                                 <h4 class="title-style">
-                                <span class="video-title">
-                                    {{ music.title }}
-                                </span>
+                  <span class="video-title">
+                    {{ music.title }}
+                  </span>
                                 </h4>
                             </div>
                         </div>
@@ -100,125 +143,156 @@ import {ajax, apiUrls} from "../store/api/urls";
 import Ghost from "../components/Ghost";
 
 export default {
-    name: 'DesignTest',
+    name: "DesignTest",
     props: {msg: String},
     components: {
-        Ghost
+        Ghost,
     },
     data() {
         //Why does the return force me to put the { on the same line?????
         return {
             ItemToUserList: [],
             ItemToItemList: [],
+            FavoritesList: [],
             CurrentMusic: null,
             screenWidth: 0,
             enablePlayer: true,
-        }
+            IsTabActive: true,
+        };
     },
     methods: {
+        ChangeTab() {
+            this.IsTabActive = !this.IsTabActive
+        },
+        AddToPlaylist() {
+            const musicId = this.$route.query.music_id;
+            console.log(musicId);
+        },
+        Share() {
+            const link =
+                "https://www.facebook.com/sharer/sharer.php?u=" +
+                "https://www.youtube.com/watch?v=" +
+                this.$route.query.music_id;
+            window.open(link, "_blank");
+        },
         SelectItemToUser(music) {
-            this.CurrentMusic = null
+            this.CurrentMusic = null;
             setTimeout(() => {
-                this.CurrentMusic = music
-                this.$router.push({query: {music_id: music.video_id}})
-                this.newItemToItemList(music)
-            }, 1)
+                this.CurrentMusic = music;
+                this.$router.push({query: {music_id: music.video_id}});
+                this.newItemToItemList(music);
+            }, 1);
         },
         SelectItemToItem(music) {
-            this.CurrentMusic = null
+            this.CurrentMusic = null;
             setTimeout(() => {
-                this.CurrentMusic = music
-                this.$router.push({query: {music_id: music.video_id}})
-                this.newItemToItemList(music)
-            }, 1)
-            ajax.get(apiUrls.musicList, {
-                params: {
-                    recom_type: 'itius',
-                    // user_id: null,
-                    item_id: music.video_id,
-                    number_of_items: 20,
-                }
-            }).then(response => {
-                this.ItemToUserList = response.data
-                this.ItemToUserList.filter(el => el.video_id === music.video_id)
-                this.ItemToUserList.unshift(music)
-            })
+                this.CurrentMusic = music;
+                this.$router.push({query: {music_id: music.video_id}});
+                this.newItemToItemList(music);
+            }, 1);
+            ajax
+                .get(apiUrls.musicList, {
+                    params: {
+                        recom_type: "itius",
+                        // user_id: null,
+                        item_id: music.video_id,
+                        number_of_items: 20,
+                    },
+                })
+                .then((response) => {
+                    this.ItemToUserList = response.data;
+                    this.ItemToUserList.filter((el) => el.video_id === music.video_id);
+                    this.ItemToUserList.unshift(music);
+                });
         },
         PlayerStateChange(event) {
             if (event && event.data === 0) {
-                const index = this.ItemToUserList.findIndex(el => {
-                    return el.video_id === this.CurrentMusic.video_id
-                })
+                const index = this.ItemToUserList.findIndex((el) => {
+                    return el.video_id === this.CurrentMusic.video_id;
+                });
                 if (this.ItemToUserList.length > index + 1) {
-                    this.SelectItemToUser(this.ItemToUserList[index + 1])
+                    this.SelectItemToUser(this.ItemToUserList[index + 1]);
                 }
             }
         },
         resizeEvent() {
-            this.enablePlayer = false
+            this.enablePlayer = false;
             setTimeout(() => {
-                this.enablePlayer = true
-            }, 1)
-            this.screenWidth = window.innerWidth
+                this.enablePlayer = true;
+            }, 1);
+            this.screenWidth = window.innerWidth;
         },
         newItemToItemList(item) {
-            ajax.get(apiUrls.musicList, {
-                params: {
-                    recom_type: 'iti',
-                    item_id: item.video_id,
-                    number_of_items: 50,
-                }
-            }).then(response => {
-                this.ItemToItemList = response.data
-            })
+            ajax
+                .get(apiUrls.musicList, {
+                    params: {
+                        recom_type: "iti",
+                        item_id: item.video_id,
+                        number_of_items: 50,
+                    },
+                })
+                .then((response) => {
+                    this.ItemToItemList = response.data;
+                });
         },
         playerReady() {
-            this.$refs.player.unMute()
+            this.$refs.player.unMute();
         },
         getInitialData() {
-            ajax.get(apiUrls.musicList, {
-                params: {
-                    recom_type: 'itu',
-                    // user_id: null,
-                    number_of_items: 20,
-                }
-            }).then(response => {
-                this.ItemToUserList = response.data
-                this.CurrentMusic = this.ItemToUserList.length ? this.ItemToUserList[0] : null
-                if (this.CurrentMusic) {
-                    this.$router.push({query: {music_id: this.CurrentMusic.video_id}})
-                    this.newItemToItemList(this.CurrentMusic)
-                }
-            })
-        }
+            ajax
+                .get(apiUrls.musicList, {
+                    params: {
+                        recom_type: "itu",
+                        // user_id: null,
+                        number_of_items: 20,
+                    },
+                })
+                .then((response) => {
+                    this.ItemToUserList = response.data;
+                    this.CurrentMusic = this.ItemToUserList.length
+                        ? this.ItemToUserList[0]
+                        : null;
+                    if (this.CurrentMusic) {
+                        this.$router.push({
+                            query: {music_id: this.CurrentMusic.video_id},
+                        });
+                        this.newItemToItemList(this.CurrentMusic);
+                    }
+                });
+
+            /*Here we want to also get the list of favorites*/
+
+        },
     },
     computed: {
         playerSize() {
-            return this.screenWidth ? this.screenWidth : 0
+            return this.screenWidth ? this.screenWidth : 0;
         },
         playerParameters() {
-            return {autoplay: 1}
-        }
+            return {autoplay: 1};
+        },
     },
     mounted() {
-        this.screenWidth = window.innerWidth
-        const music_id = this.$route.query.music_id
+        this.screenWidth = window.innerWidth;
+        const music_id = this.$route.query.music_id;
         if (music_id) {
-            this.SelectItemToItem({video_id: music_id})
+            this.SelectItemToItem({video_id: music_id});
         } else {
-            this.getInitialData()
+            this.getInitialData();
         }
     },
     watch: {
         $route(route) {
-            const music_id = route.query.music_id
-            if (!this.CurrentMusic && music_id || music_id && music_id !== this.CurrentMusic.video_id) {
-                this.SelectItemToItem({video_id: music_id})
+            const music_id = route.query.music_id;
+            if (
+                (!this.CurrentMusic && music_id) ||
+                (music_id && music_id !== this.CurrentMusic.video_id)
+            ) {
+                this.SelectItemToItem({video_id: music_id});
             }
-        }
-    }
-}
-
+        },
+    },
+};
 </script>
 
 
@@ -229,6 +303,32 @@ Add breakpoints
 
 Turn dimensions into ratios
 */
+
+.tabs {
+    display: flex;
+    overflow: hidden;
+    justify-content: center;
+    height: 30px;
+    background: #1b1b1b;
+    margin-top: -2px;
+    border-radius: 5%;
+}
+
+.tab-recomended,
+.tab-favorite {
+    width: 30%;
+    background: #ff2556;
+    border-radius: 11%;
+    border-top-width: 10%;
+    border-style: solid;
+    border-color: black;
+    height: 100%;
+    margin-left: 7%;
+}
+
+.active {
+    background: #960323;
+}
 
 
 .playlist-item a {
@@ -249,16 +349,15 @@ Turn dimensions into ratios
     size: 20px;
     border-radius: 3px;
     cursor: pointer;
-
 }
 
 .MainContainer {
-
     display: grid;
     grid-template-areas:
-    'head head head'
-    'left main right'
-    'bottom bottom bottom';
+    "head head head"
+    "left main right"
+    "bottom bottom bottom";
+    align-items: center;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 10px;
     padding-left: 15px;
@@ -289,7 +388,6 @@ Turn dimensions into ratios
     border-bottom: 6px solid #c3073f;
     color: #4e4e50;
     box-shadow: 5px 5px 10px 5px rgba(9, 32, 71, 0.6);
-
 }
 
 .music-player {
@@ -297,13 +395,10 @@ Turn dimensions into ratios
     flex-direction: column;
 }
 
-
-svg {
-    background-color: #c3073f;
-    width: 35px;
-    height: 35px;
-    border-radius: 20px;
-    cursor: pointer;
+svg,
+.action-item img {
+    width: 75%;
+    height: 100%;
 }
 
 .actions-wrapper {
@@ -315,6 +410,11 @@ svg {
 .action-item {
     margin: 5px;
     align-items: center;
+    background-color: #c3073f;
+    width: 35px;
+    height: 35px;
+    border-radius: 20px;
+    cursor: pointer;
 }
 
 .LeftRecommendation {
@@ -334,8 +434,6 @@ svg {
     border-bottom: 6px solid #c3073f;
     color: #4e4e50;
     box-shadow: 5px 5px 10px 5px rgba(9, 32, 71, 0.6);
-
-
 }
 
 .playlist-items::-webkit-scrollbar {
@@ -359,25 +457,21 @@ svg {
     flex-direction: column;
     font-size: 10px;
     max-height: 460px;
-    margin-top: 24px;
-    margin-bottom: 24px;
 
     border-radius: 20px;
     border-top: 6px solid #c3073f;
     border-bottom: 6px solid #c3073f;
     color: #4e4e50;
     box-shadow: 5px 5px 10px 5px rgba(9, 32, 71, 0.6);
-
+    margin-top: 24px;
+    margin-bottom: 24px;
 }
 
 .playlist-items {
-
     overflow-y: auto;
-    margin: 0 0 0 0;
-    height: 363px;
+    height: 333px;
     font-size: 10px;
     display: block;
-    text-size-adjust: 100%;
 }
 
 .playlist-item {
@@ -414,11 +508,11 @@ svg {
     height: 100%;
 
     /*
-    These need further work
-    transform: translateY(-50%);
-    top: 50%;
-    left: 0;
-    */
+      These need further work
+      transform: translateY(-50%);
+      top: 50%;
+      left: 0;
+      */
 }
 
 .meta {
@@ -439,12 +533,12 @@ svg {
     font-weight: bold;
 
     /*
-    Don't understand these
-    margin-block-start: 1.33em;
-    margin-block-end: 1.33em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
-    */
+      Don't understand these
+      margin-block-start: 1.33em;
+      margin-block-end: 1.33em;
+      margin-inline-start: 0px;
+      margin-inline-end: 0px;
+      */
 }
 
 .video-title {
@@ -454,19 +548,16 @@ svg {
     overflow: hidden;
 
     /*
-    this puts dots(...) after the text if it overflows
-    but it doesn't work without the previous stuff
-    */
+      this puts dots(...) after the text if it overflows
+      but it doesn't work without the previous stuff
+      */
     text-overflow: ellipsis;
-
 
     margin: 0 0 4px 0;
     padding: 0;
 
-
     font-size: 14px;
     font-weight: 500;
-    text-decoration-thickness: initial;
     white-space: normal;
 }
 
@@ -502,7 +593,8 @@ ul li {
     color: #05d9e8;
 }
 
-p, label {
+p,
+label {
     font-family: monospace, "Lucida Console";
     font-style: oblique;
     color: #05d9e8;
