@@ -9,13 +9,16 @@
         </p>
         <ul>
           <label>
-            <li><input name="describe the song" type="radio" /> <i>Good</i></li>
+            <li><input name="describe the song" type="radio" /> <i>Happy</i></li>
           </label>
           <label>
-            <li><input name="describe the song" type="radio" /> <i>Bad</i></li>
+            <li><input name="describe the song" type="radio" /> <i>Cheerful</i></li>
           </label>
           <label>
-            <li><input name="describe the song" type="radio" /> <i>Ugly</i></li>
+            <li><input name="describe the song" type="radio" /> <i>Gloomy</i></li>
+          </label>
+          <label>
+            <li><input name="describe the song" type="radio" /> <i>Sad</i></li>
           </label>
         </ul>
       </div>
@@ -65,24 +68,47 @@
         ></div>
       </div>
       <div class="playlist-items">
-        <template v-for="(music, index) in ItemToUserList">
-          <div class="playlist-item" v-if="music.image_url" :key="index">
-            <a @click="SelectItemToUser(music)">
-              <div class="thumbnail-meta-container">
-                <div class="thumbnail-container">
-                  <img :src="music.image_url" />
+        <template v-if="IsTabActive">    
+            <template v-for="(music, index) in ItemToUserList">
+            <div class="playlist-item" v-if="music.image_url" :key="index">
+                <a @click="SelectItemToUser(music)">
+                <div class="thumbnail-meta-container">
+                    <div class="thumbnail-container">
+                    <img :src="music.image_url" />
+                    </div>
+                    <div class="meta">
+                    <h4 class="title-style">
+                        <span class="video-title">
+                        {{ music.title }}
+                        </span>
+                    </h4>
+                    </div>
                 </div>
-                <div class="meta">
-                  <h4 class="title-style">
-                    <span class="video-title">
-                      {{ music.title }}
-                    </span>
-                  </h4>
-                </div>
-              </div>
-            </a>
-          </div>
+                </a>
+            </div>
+            </template>
         </template>
+        <template v-else>
+            <template v-for="(music, index) in FavoritesList">
+                <div class="playlist-item" v-if="music.image_url" :key="index">
+                <a @click="SelectItemToUser(music)">
+                <div class="thumbnail-meta-container">
+                    <div class="thumbnail-container">
+                    <img :src="music.image_url" />
+                    </div>
+                    <div class="meta">
+                    <h4 class="title-style">
+                        <span class="video-title">
+                        {{ music.title }}
+                        </span>
+                    </h4>
+                    </div>
+                </div>
+                </a>
+            </div>  
+            </template>
+        </template>
+
       </div>
     </div>
     <div class="bottom-listing">
@@ -127,6 +153,7 @@ export default {
     return {
       ItemToUserList: [],
       ItemToItemList: [],
+      FavoritesList: [],
       CurrentMusic: null,
       screenWidth: 0,
       enablePlayer: true,
@@ -232,6 +259,9 @@ export default {
             this.newItemToItemList(this.CurrentMusic);
           }
         });
+
+        /*Here we want to also get the list of favorites*/
+
     },
   },
   computed: {
@@ -276,22 +306,28 @@ Turn dimensions into ratios
 
 .tabs {
   display: flex;
-  height: 50px;
+  overflow:hidden;
+  justify-content:center;
+  height: 8%;
+  background: #1b1b1b;
+  margin-top: -2px;
+  border-radius: 5%;
 }
 
 .tab-recomended,
 .tab-favorite {
-  width: 50%;
+  width: 30%;
   background: #ff2556;
-  border-radius: 15px;
-  border: 3px solid black;
+  border-radius: 11%;
+  border-top-width:10%;
+  border-style:solid;
+  border-color: black;
+  height: 100%;
+  margin-left:7%;
 }
 
 .active {
-  width: 50%;
-  background: #5a0c1d;
-  border-radius: 15px;
-  border: 3px solid black;
+  background: #960323;
 }
 
 
@@ -435,7 +471,6 @@ svg,
   height: 363px;
   font-size: 10px;
   display: block;
-  text-size-adjust: 100%;
 }
 
 .playlist-item {
@@ -522,7 +557,6 @@ svg,
 
   font-size: 14px;
   font-weight: 500;
-  text-decoration-thickness: initial;
   white-space: normal;
 }
 
