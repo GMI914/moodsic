@@ -56,12 +56,12 @@
         <div
           class="tab-recomended"
           @click="ChangeTab"
-          v-class="{ active: IsTabActive }"
+          :class="{ active: IsTabActive }"
         ></div>
         <div
           class="tab-favorite"
           @click="ChangeTab"
-          v-class="{ active: !IsTabActive }"
+          :class="{ active: !IsTabActive }"
         ></div>
       </div>
       <div class="playlist-items">
@@ -287,12 +287,13 @@ Turn dimensions into ratios
   border: 3px solid black;
 }
 
-.active{
+.active {
   width: 50%;
-  background: #ce4261;
+  background: #5a0c1d;
   border-radius: 15px;
   border: 3px solid black;
 }
+
 
 .playlist-item a {
   cursor: pointer;
