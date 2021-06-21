@@ -36,16 +36,16 @@
                 </div>
                 <div class="actions-wrapper">
                     <router-link tag="div" class="action-item" :to="{name: 'question'}">
-                        <svg width="25" height="25"></svg>
+                        <svg></svg>
                     </router-link>
                     <router-link tag="div" class="action-item" :to="{name: 'login'}">
-                        <svg width="18" height="16"></svg>
+                        <svg></svg>
                     </router-link>
-                    <router-link tag="div" class="action-item" :to="{name: 'register'}">
-                        <svg width="18" height="16"></svg>
-                    </router-link>
-                    <div class="action-item">
-                        <svg width="18" height="16"></svg>
+                    <div class="action-item" @click="AddToPlaylist">
+                        <svg></svg>
+                    </div>
+                    <div class="action-item" @click="Share" >
+                        <img src="../assets/share.svg" />
                     </div>
                 </div>
             </div>
@@ -116,6 +116,14 @@ export default {
         }
     },
     methods: {
+        AddToPlaylist(){
+            
+
+        },
+        Share(){
+            const link="https://www.facebook.com/sharer/sharer.php?u="+"https://www.youtube.com/watch?v="+this.$route.query.music_id
+            window.open(link,"_blank")
+        },
         SelectItemToUser(music) {
             this.CurrentMusic = null
             setTimeout(() => {
@@ -298,13 +306,12 @@ Turn dimensions into ratios
 }
 
 
-svg {
-    background-color: #c3073f;
-    width: 35px;
-    height: 35px;
-    border-radius: 20px;
-    cursor: pointer;
+svg , .action-item img {
+    width: 75%;
+    height: 100%;
+    
 }
+
 
 .actions-wrapper {
     display: flex;
@@ -315,6 +322,12 @@ svg {
 .action-item {
     margin: 5px;
     align-items: center;
+    background-color: #c3073f;
+    width: 35px;
+    height: 35px;
+    border-radius: 20px;
+    cursor: pointer;
+    
 }
 
 .LeftRecommendation {
