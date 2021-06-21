@@ -12,6 +12,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('jet/', include('jet.urls', 'jet')),
     path('api/music/', include('music.urls')),
+    path('api/user/', include('user.urls')),
     path('openapi/',
          get_schema_view(
              title="Moodsic",
@@ -38,6 +39,7 @@ if settings.DEBUG:
     ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     # -- Debug Toolbar
     import debug_toolbar
+
     urlpatterns += [
         path('__debug__/', include(debug_toolbar.urls)),
     ]
