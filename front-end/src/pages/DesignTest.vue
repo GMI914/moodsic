@@ -64,12 +64,12 @@
           class="tab-recomended"
           @click="ChangeTab('recomended')"
           :class="{ active: IsTabActive }"
-        ></div>
+        >Recomended</div>
         <div
           class="tab-favorite"
           @click="ChangeTab('favorite')"
           :class="{ active: !IsTabActive }"
-        ></div>
+        >Favorites</div>
       </div>
       <div class="playlist-items">
         <template v-if="IsTabActive">
@@ -347,21 +347,33 @@ Turn dimensions into ratios
   justify-content: center;
   height: 30px;
   background: #1b1b1b;
-  margin-top: -2px;
   border-radius: 5%;
+  font-size: 1.2vw;
+  text-align: center;
 }
 
-.tab-recomended,
 .tab-favorite {
   width: 30%;
   background: #ff2556;
-  border-radius: 11%;
-  border-top-width: 10%;
-  border-style: solid;
-  border-color: black;
-  height: 100%;
+  border: black solid 2px;
+  border-radius: 20px;
+  height: 80%;
   margin-left: 7%;
+  cursor: pointer;
+  align-self: center;
+  overflow: hidden;
 }
+.tab-recomended {
+  width: 30%;
+  background: #ff2556;
+  border: black solid 2px;
+  border-radius: 20px;
+  height: 80%;
+  cursor: pointer;
+  align-self: center;
+  overflow: hidden;
+}
+
 
 .active {
   background: #960323;
