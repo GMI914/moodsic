@@ -46,11 +46,14 @@
           ></youtube-iframe>
         </div>
         <div class="actions-wrapper">
-          <router-link tag="div" class="action-item" :to="{ name: 'question' }">
-            <svg></svg>
-          </router-link>
           <div class="action-item" @click="AddToPlaylist">
-            <svg></svg>
+            <img src="../assets/like.svg" />
+          </div>
+          <div class="action-item" @click="AddToPlaylist">
+            <img src="../assets/dislike.svg" />
+          </div>
+          <div class="action-item" @click="AddToPlaylist">
+            <img src="../assets/heart.svg" />
           </div>
           <div class="action-item" @click="Share">
             <img src="../assets/share.svg" />
@@ -445,7 +448,7 @@ Turn dimensions into ratios
 
 svg,
 .action-item img {
-  width: 75%;
+  width: 70%;
   height: 100%;
 }
 
