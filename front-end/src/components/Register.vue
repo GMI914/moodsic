@@ -1,16 +1,38 @@
 <template>
   <legend>Register</legend>
   <p>Username</p>
-  <input type="text" name="user-name" />
+  <input type="text" name="user-name" v-model="RegistrationData.username" />
   <p>Password</p>
-  <input type="password" name="password" />
+  <input type="password" name="password" v-model="RegistrationData.password" />
   <p>Repeat Password</p>
-  <input type="password" name="password-confirm" />
-  <input type="submit" @submit.prevent="" value="Proceed!" />
+  <input type="password" name="password-confirm" v-model="RegistrationData.password2" />
+  <button  @click="Register"  >Proceed</button>
+
 </template>
 
 <script>
-export default {};
+
+import { ajax, apiUrls } from "../store/api/urls";
+
+export default {
+  data(){
+    return{
+      RegistrationData:{
+        username:'' ,
+        password:'',
+        password2:'',
+      }
+    }
+  },
+  methods:{
+    Register(){
+      ajax.post(apiUrls.registerUser,this.RegistrationData).then(response=>{console.log(response.data)})
+    }
+
+  }
+
+  
+};
 </script>
 
 <style scoped>
@@ -35,7 +57,7 @@ input[type="password"] {
   
 }
 
-input[type="submit"] {
+button {
   background-color: #c3073f;
   color: white;
   padding: 12px 20px;

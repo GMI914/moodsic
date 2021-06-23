@@ -1,8 +1,8 @@
 <template>
   <legend>Login</legend>
-  <p>email</p>
+  <p>Username</p>
   <input type="text" name="email" />
-  <p>password</p>
+  <p>Password</p>
   <input type="password" name="password" />
   <input type="submit" value="Proceed!" />
 </template>
