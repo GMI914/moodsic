@@ -16,12 +16,24 @@ mood_descriptors = {
 
 class Command(BaseCommand):
 
+    @staticmethod
+    def get_rating(freq_table):
+        score = 0
+        main_mood = 'undefined'
+        score_obj = {
+            'sad': 1, 'gloomy': 2, 'cheerful': 3, 'happy': 4, 'undefined': 0
+        }
+        for mood in ['sad', 'gloomy', 'cheerful', 'happy']:
+            if freq_table.get(mood) > score:
+                score = freq_table.get(mood)
+                main_mood = mood
+        return score_obj.get(main_mood)
+
     def handle(self, *args: Any, **options: Any) -> None:
         stop_words = set(stopwords.words("english"))
         ps = PorterStemmer()
 
         for music in Music.objects.all():
-            frequency_matrix = []
             words_count = 0
             freq_table = {'sad': 0, 'gloomy': 0, 'cheerful': 0, 'happy': 0}
             for tag in music.tags.all():
@@ -37,7 +49,7 @@ class Command(BaseCommand):
                             freq_table[mood_descriptor] += 1
 
             for key, value in freq_table.items():
-                freq_table[key] = value / words_count if words_count is not 0 else 0
+                freq_table[key] = value / words_count if words_count != 0 else 0
 
-            if freq_table['cheerful'] > 0 or freq_table['happy'] > 0 or freq_table['gloomy'] > 0:
-                print(freq_table, music.video_id)
+            music.custom_rating = self.get_rating(freq_table)
+            music.save()
