@@ -1,11 +1,8 @@
-
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.utils.functional import cached_property
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
-
 
 
 class User(AbstractUser):
@@ -20,8 +17,9 @@ class User(AbstractUser):
             'unique': _("A user with that username already exists."),
         },
     )
-    #Creating many to many filed between user and music
+    # Creating many to many filed between user and music
     favorite = models.ManyToManyField(verbose_name="Favorite", to="music.Music", related_name='user')
+
     class Meta:
         verbose_name = _("User")
         verbose_name_plural = _("Users")

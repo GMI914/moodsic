@@ -1,4 +1,5 @@
-from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth.password_validation import MinimumLengthValidator
+from django.contrib.auth.validators import UnicodeUsernameValidator
 from rest_framework import serializers
 from rest_framework.fields import CharField
 from django.utils.translation import gettext_lazy as _
@@ -9,8 +10,8 @@ from user.models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
-    username = CharField(required=True)
-    password = CharField(write_only=True, validators=[validate_password])
+    username = CharField(required=True, validators=[UnicodeUsernameValidator])
+    password = CharField(write_only=True, validators=[MinimumLengthValidator])
     password2 = CharField(write_only=True)
     favorite = MusicCustomSerializer(many=True, read_only=True, required=False)
 
@@ -21,13 +22,15 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
     def validate(self, attrs):
+        if User.objects.filter(username=attrs['username']).get():
+            raise serializers.ValidationError({
+                'username': _("This Username Is Already Taken"),
+            })
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError({
                 'password': _("Password fields didn't match."),
                 'password2': _("Password fields didn't match"),
-
             })
-
         return attrs
 
     def create(self, validated_data) -> 'User':
