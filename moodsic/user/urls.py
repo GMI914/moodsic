@@ -1,14 +1,10 @@
-from django.urls import path, include
+from django.urls import path
 from rest_framework.authtoken.views import ObtainAuthToken
-from rest_framework import routers
-from user.views import UserView
-
-
-router = routers.SimpleRouter()
-router.register(r'user', UserView, basename='user')
-
+from user.views import UserView, CreateUserView, user_logout
 
 urlpatterns = [
-    path('', include(router.urls)),
-    path('getToken/', ObtainAuthToken.as_view()),
+    path('getToken/', ObtainAuthToken.as_view(), name='login'),
+    path('register/', CreateUserView.as_view(), name='register'),
+    path('detail/', UserView.as_view(), name='detail'),
+    path('logout/', user_logout, name='logout'),
 ]
