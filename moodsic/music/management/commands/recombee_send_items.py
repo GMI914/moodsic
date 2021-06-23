@@ -16,6 +16,10 @@ class Command(BaseCommand):
         musics = Music.objects.all()
         ratio = 0
 
+        score_obj = {
+            1: 'sad', 2: 'gloomy', 3: 'cheerful', 4: 'happy', 0: 'undefined'
+        }
+
         for music in musics:
             if music.dislike == 0:
                 ratio = 0
@@ -25,7 +29,7 @@ class Command(BaseCommand):
                 SetItemValues(
                     str(music.video_id),
                     {
-                        "mood": "happy",
+                        "mood": score_obj.get(music.custom_rating, 'undefined'),
                         "length": music.video_length,
                         "viewCount": music.views,
                         "likeDislikeRatio": ratio,

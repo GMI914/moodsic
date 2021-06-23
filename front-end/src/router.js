@@ -1,7 +1,5 @@
 import DesignTest from './pages/DesignTest.vue'
-import Login from './pages/Login.vue'
 import Questions from './pages/Questions.vue'
-import Register from './pages/Register.vue'
 
 export const routes = [
     {
@@ -12,12 +10,5 @@ export const routes = [
         name: 'home',
         path: '/', component: DesignTest
     },
-    {
-        name: 'login',
-        path: '/login', component: Login
-    },
-    {
-        name: 'register',
-        path: '/register', component: Register
-    },
+  
 ]
