@@ -46,16 +46,16 @@
           ></youtube-iframe>
         </div>
         <div class="actions-wrapper">
-          <div class="action-item" @click="AddToPlaylist">
+          <div class="action-item bubbly-button " @click="AddToPlaylist; AnimateButton($event)">
             <img src="../assets/like.svg" />
           </div>
-          <div class="action-item" @click="AddToPlaylist">
+          <div class="action-item bubbly-button " @click="AddToPlaylist; AnimateButton($event)">
             <img src="../assets/dislike.svg" />
           </div>
-          <div class="action-item" @click="AddToPlaylist">
+          <div class="action-item bubbly-button" @click="AddToPlaylist; AnimateButton($event)">
             <img src="../assets/heart.svg" />
           </div>
-          <div class="action-item" @click="Share">
+          <div class="action-item bubbly-button" @click="Share">
             <img src="../assets/share.svg" />
           </div>
         </div>
@@ -64,15 +64,19 @@
     <div class="right-recommended">
       <div class="tabs">
         <div
-          class="tab-recomended"
+          class="tab-recomended bubbly-button"
           @click="ChangeTab('recomended')"
           :class="{ active: IsTabActive }"
-        >Recomended</div>
+        >
+          Recomended
+        </div>
         <div
-          class="tab-favorite"
+          class="tab-favorite bubbly-button"
           @click="ChangeTab('favorite')"
           :class="{ active: !IsTabActive }"
-        >Favorites</div>
+        >
+          Favorites
+        </div>
       </div>
       <div class="playlist-items">
         <template v-if="IsTabActive">
@@ -149,14 +153,14 @@
       </div>
       <div class="center">
         <youtube-iframe
-            ref="player"
-            :noCookie="true"
-            :playerParameters="playerParameters"
-            :player-width="playerSize / 3"
-            :player-height="(playerSize * 3) / 16"
-            :video-id='OK'
-            @ready="playerReady"
-          ></youtube-iframe>
+          ref="player"
+          :noCookie="true"
+          :playerParameters="playerParameters"
+          :player-width="playerSize / 3"
+          :player-height="(playerSize * 3) / 16"
+          :video-id="OK"
+          @ready="playerReady"
+        ></youtube-iframe>
       </div>
       <div class="right-recommended">
         <Login></Login>
@@ -170,6 +174,7 @@ import { ajax, apiUrls } from "../store/api/urls";
 import Ghost from "../components/Ghost";
 import Register from "../components/Register";
 import Login from "../components/Login";
+import "../../design/bublebutton.scss";
 
 export default {
   name: "DesignTest",
@@ -189,20 +194,32 @@ export default {
       screenWidth: 0,
       enablePlayer: true,
       IsTabActive: true,
-      IsLogedIn: true,
-      OK:'IxWo7yG-W-E'
+      IsLogedIn: false,
+      OK: "IxWo7yG-W-E",
       
     };
   },
   methods: {
+    AnimateButton(e) {
+      e.preventDefault;
+      //reset animation
+      e.target.parentNode.classList.remove("animate");
+
+      e.target.parentNode.classList.add("animate");
+      setTimeout(function () {
+        e.target.parentNode.classList.remove("animate");
+      }, 1000);
+      
+    },
+
     ChangeTab(tab) {
-      if(tab==='recomended'){
-        if(this.IsTabActive===true) return;
-        else this.IsTabActive = !this.IsTabActive
+      if (tab === "recomended") {
+        if (this.IsTabActive === true) return;
+        else this.IsTabActive = !this.IsTabActive;
       }
-      if(tab==='favorite'){
-        if(this.IsTabActive===false) return;
-        else this.IsTabActive = !this.IsTabActive
+      if (tab === "favorite") {
+        if (this.IsTabActive === false) return;
+        else this.IsTabActive = !this.IsTabActive;
       }
     },
     AddToPlaylist() {
@@ -244,6 +261,28 @@ export default {
           this.ItemToUserList = response.data;
           this.ItemToUserList.filter((el) => el.video_id === music.video_id);
           this.ItemToUserList.unshift(music);
+        });
+    },
+    Getfavorite(music) {
+      this.CurrentMusic = null;
+      setTimeout(() => {
+        this.CurrentMusic = music;
+        this.$router.push({ query: { music_id: music.video_id } });
+        this.newItemToItemList(music);
+      }, 1);
+      ajax
+        .get(apiUrls.musicList, {
+          params: {
+            recom_type: "itius",
+            // user_id: null,
+            item_id: music.video_id,
+            number_of_items: 5,
+          },
+        })
+        .then((response) => {
+          this.FavoritesList = response.data;
+          this.FavoritesList.filter((el) => el.video_id === music.video_id);
+          this.FavoritesList.unshift(music);
         });
     },
     PlayerStateChange(event) {
@@ -316,6 +355,7 @@ export default {
     this.screenWidth = window.innerWidth;
     const music_id = this.$route.query.music_id;
     if (music_id) {
+      this.Getfavorite({ video_id: music_id });
       this.SelectItemToItem({ video_id: music_id });
     } else {
       this.getInitialData();
@@ -377,7 +417,6 @@ Turn dimensions into ratios
   overflow: hidden;
 }
 
-
 .active {
   background: #960323;
 }
@@ -430,15 +469,14 @@ Turn dimensions into ratios
 
 .center {
   background-color: #262626;
-
   grid-area: main;
-
   margin-top: 12px;
   border-radius: 20px;
   border-top: 6px solid #c3073f;
   border-bottom: 6px solid #c3073f;
   color: #4e4e50;
   box-shadow: 5px 5px 10px 5px rgba(9, 32, 71, 0.6);
+  height: 400px;
 }
 
 .music-player {
@@ -485,6 +523,7 @@ svg,
   border-bottom: 6px solid #c3073f;
   color: #4e4e50;
   box-shadow: 5px 5px 10px 5px rgba(9, 32, 71, 0.6);
+  height: 350px;
 }
 
 .playlist-items::-webkit-scrollbar {
@@ -516,6 +555,7 @@ svg,
   box-shadow: 5px 5px 10px 5px rgba(9, 32, 71, 0.6);
   margin-top: 24px;
   margin-bottom: 24px;
+  height: 350px;
 }
 
 .playlist-items {
