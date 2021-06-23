@@ -22,7 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
     def validate(self, attrs):
-        if User.objects.filter(username=attrs['username']):
+        if len(list(User.objects.filter(username=attrs['username']))) != 0:
             raise serializers.ValidationError({
                 'username': _("This Username Is Already Taken"),
             })
