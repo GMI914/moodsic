@@ -1,17 +1,35 @@
 <template>
   <legend>Login</legend>
   <p>Username</p>
-  <input type="text" name="email" />
+  <input type="text" v-model="LoginData.username"/>
   <p>Password</p>
-  <input type="password" name="password" />
-  <input type="submit" value="Proceed!" />
+  <input type="password" v-model="LoginData.password"/>
+  <button  @click="Login" >Proceed</button>
 </template>
 
 <script>
-export default {};
+import { ajax, apiUrls } from "../store/api/urls";
+
+export default {
+  data(){
+    return{
+      LoginData:{
+        username:'' ,
+        password:'',
+      }
+    }
+  },
+  methods:{
+    Login(){
+      ajax.post(apiUrls.loginUser,this.LoginData).then(response=>{console.log(response.data)})
+    }
+
+  }
+}
 </script>
 
 <style scoped>
+
 input[type="text"],
 input[type="password"] {
   display: block;
@@ -27,7 +45,7 @@ input[type="password"] {
   margin: 3px auto 9px;
 }
 
-input[type="submit"] {
+button {
   background-color: #c3073f;
   color: white;
   padding: 12px 20px;

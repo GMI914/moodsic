@@ -194,7 +194,7 @@ export default {
       screenWidth: 0,
       enablePlayer: true,
       IsTabActive: true,
-      IsLogedIn: false,
+      IsLogedIn: true,
       OK: "IxWo7yG-W-E",
       
     };

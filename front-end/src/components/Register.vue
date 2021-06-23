@@ -1,12 +1,12 @@
 <template>
   <legend>Register</legend>
   <p>Username</p>
-  <input type="text" name="user-name" v-model="RegistrationData.username" />
+  <input type="text"  v-model="RegistrationData.username" />
   <p>Password</p>
-  <input type="password" name="password" v-model="RegistrationData.password" />
+  <input type="password" v-model="RegistrationData.password" />
   <p>Repeat Password</p>
-  <input type="password" name="password-confirm" v-model="RegistrationData.password2" />
-  <button  @click="Register"  >Proceed</button>
+  <input type="password"  v-model="RegistrationData.password2" />
+  <button  @click="Register" >Proceed</button>
 
 </template>
 
