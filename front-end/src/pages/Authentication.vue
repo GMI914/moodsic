@@ -31,8 +31,12 @@ export default {
     },
     data() {
         return {
+            screenWidth: 0,
             OK: "IxWo7yG-W-E",
         }
+    },
+    mounted() {
+        this.screenWidth = window.innerWidth;
     },
     methods: {
         playerReady() {
