@@ -10,21 +10,21 @@
                 <ul>
                     <label>
                         <li>
-                            <input name="describe the song" type="radio"/> <i>Happy</i>
+                            <input name="happy" type="radio"/> <i>Happy</i>
                         </li>
                     </label>
                     <label>
                         <li>
-                            <input name="describe the song" type="radio"/> <i>Cheerful</i>
+                            <input name="cheerful" type="radio"/> <i>Cheerful</i>
                         </li>
                     </label>
                     <label>
                         <li>
-                            <input name="describe the song" type="radio"/> <i>Gloomy</i>
+                            <input name="gloomy" type="radio"/> <i>Gloomy</i>
                         </li>
                     </label>
                     <label>
-                        <li><input name="describe the song" type="radio"/> <i>Sad</i></li>
+                        <li><input name="sad" type="radio"/> <i>Sad</i></li>
                     </label>
                 </ul>
             </div>
@@ -82,7 +82,7 @@
                 <template v-if="IsTabActive">
                     <template v-for="(music, index) in ItemToUserList">
                         <div class="playlist-item" v-if="music.image_url" :key="index">
-                            <a @click="SelectItemToUser(music)">
+                            <a @click="SelectItemToUser(music); MarkAsListened(index)">
                                 <div class="thumbnail-meta-container">
                                     <div class="thumbnail-container">
                                         <img :src="music.image_url"/>
@@ -102,7 +102,7 @@
                 <template v-else>
                     <template v-for="(music, index) in FavoritesList">
                         <div class="playlist-item" v-if="music.image_url" :key="index">
-                            <a @click="SelectItemToUser(music)">
+                            <a @click="SelectItemToUser(music); MarkAsListened(index)">
                                 <div class="thumbnail-meta-container">
                                     <div class="thumbnail-container">
                                         <img :src="music.image_url"/>
@@ -205,7 +205,21 @@ export default {
                 this.$route.query.music_id;
             window.open(link, "_blank");
         },
+        
+        MarkAsListened(index)
+        {
+            //maxinaciebia nawarmoebi imistvis rom stili sworad sheicvalos ukve mosmenil simgeraze
+            let ListOfPlayListItems = Array.from(document.getElementsByClassName('playlist-item'))
+            ListOfPlayListItems.forEach( (element) => {
+                if(ListOfPlayListItems.indexOf(element) == index-1)
+                {
+                    element.childNodes[0    ].classList.add('playlist-item-listened')      
+                }
+                console.log(index)
+                })
+        },
         SelectItemToUser(music) {
+
             this.CurrentMusic = null;
             setTimeout(() => {
                 this.CurrentMusic = music;
@@ -235,7 +249,6 @@ export default {
                 });
         },
         GetFavorite(music) {
-            this.CurrentMusic = null;
             setTimeout(() => {
                 this.CurrentMusic = music;
                 this.$router.push({query: {music_id: music.video_id}});
@@ -258,6 +271,9 @@ export default {
         PlayerStateChange(event) {
             if (event && event.data === 0) {
                 const index = this.ItemToUserList.findIndex((el) => {
+                    //Here, this logic is wrong
+                    this.MarkAsListened(this.ItemToUserList.indexOf(el));
+
                     return el.video_id === this.CurrentMusic.video_id;
                 });
                 if (this.ItemToUserList.length > index + 1) {
@@ -278,7 +294,7 @@ export default {
                     params: {
                         recom_type: "iti",
                         item_id: item.video_id,
-                        number_of_items: 50,
+                        number_of_items: 20,
                     },
                 })
                 .then((response) => {
@@ -293,7 +309,7 @@ export default {
                 .get(apiUrls.musicList, {
                     params: {
                         recom_type: "itu",
-                        number_of_items: 20,
+                        number_of_items: 5,
                     },
                 })
                 .then((response) => {
@@ -308,8 +324,6 @@ export default {
                         this.newItemToItemList(this.CurrentMusic);
                     }
                 });
-
-            /*Here we want to also get the list of favorites*/
         },
     },
     computed: {
@@ -370,7 +384,7 @@ Turn dimensions into ratios
 
 .tab-favorite {
     width: 30%;
-    background: #ff2556;
+    background: #960323;
     border: black solid 2px;
     border-radius: 20px;
     height: 80%;
@@ -382,7 +396,7 @@ Turn dimensions into ratios
 
 .tab-recomended {
     width: 30%;
-    background: #ff2556;
+    background: #960323;
     border: black solid 2px;
     border-radius: 20px;
     height: 80%;
@@ -392,7 +406,8 @@ Turn dimensions into ratios
 }
 
 .active {
-    background: #960323;
+    background: #ff2556;
+    width: 29%;
 }
 
 .playlist-item a {
@@ -409,6 +424,13 @@ Turn dimensions into ratios
 }
 
 .playlist-item a:hover {
+    background-color: #254f64;
+    size: 20px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.playlist-item-listened{
     background-color: #254f64;
     size: 20px;
     border-radius: 3px;
