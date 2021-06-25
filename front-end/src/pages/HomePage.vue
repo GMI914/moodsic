@@ -10,23 +10,26 @@
                 <ul>
                     <label>
                         <li>
-                            <input name="happy" type="radio"/> <i>Happy</i>
+                            <input id="happy" name="mood" type="radio" value="happy" v-model="moodValue"/> <i>Happy</i>
                         </li>
                     </label>
                     <label>
                         <li>
-                            <input name="cheerful" type="radio"/> <i>Cheerful</i>
+                            <input id="cheerful" name="mood" type="radio" value="cheerful" v-model="moodValue"/> <i>Cheerful</i>
                         </li>
                     </label>
                     <label>
                         <li>
-                            <input name="gloomy" type="radio"/> <i>Gloomy</i>
+                            <input id="gloomy" name="mood" type="radio" value="gloomy" v-model="moodValue"/> <i>Gloomy</i>
                         </li>
                     </label>
                     <label>
-                        <li><input name="sad" type="radio"/> <i>Sad</i></li>
+                        <li><input id="sad"  name="mood" type="radio" value="sad" v-model="moodValue"/> <i>Sad</i></li>
                     </label>
                 </ul>
+            </div>
+            <div class="wrapper" @click="SelectItemToItem(ItemToItemList[0])">
+                <span>Filter !</span>
             </div>
         </div>
 
@@ -46,13 +49,13 @@
                     ></youtube-iframe>
                 </div>
                 <div class="actions-wrapper">
-                    <div class="action-item bubbly-button " @click="AddToPlaylist; AnimateButton($event)">
+                    <div class="action-item bubbly-button " @click="SendRating('like'); AnimateButton($event)">
                         <img src="../assets/like.svg"/>
                     </div>
-                    <div class="action-item bubbly-button " @click="AddToPlaylist; AnimateButton($event)">
+                    <div class="action-item bubbly-button " @click="SendRating('dislike'); AnimateButton($event)">
                         <img src="../assets/dislike.svg"/>
                     </div>
-                    <div class="action-item bubbly-button" @click="AddToPlaylist; AnimateButton($event)">
+                    <div class="action-item bubbly-button" @click="AddToPlaylist(); AnimateButton($event);">
                         <img src="../assets/heart.svg"/>
                     </div>
                     <div class="action-item bubbly-button" @click="Share">
@@ -170,9 +173,37 @@ export default {
             screenWidth: 0,
             enablePlayer: true,
             IsTabActive: true,
+            moodValue: '',
         };
     },
     methods: {
+
+        SendRating(value){
+            if(value==='like'){
+                authAjax()
+                .get(apiUrls.sendRating, {
+                    params: {
+                        user_id: 2,
+                        item_id: this.$route.query.music_id,
+                        rating: 1,
+                    },
+                })
+                .then((response)=>{console.log(response.data)})
+            }
+            else if(value==='dislike'){
+                authAjax()
+                .get(apiUrls.sendRating, {
+                    params: {
+                        user_id: 2,
+                        item_id: this.$route.query.music_id,
+                        rating: -1,
+                    },
+                })
+                .then((response)=>{console.log(response.data)})
+                
+            }
+            else{ console.log('error') }
+        },
         AnimateButton(e) {
             e.preventDefault;
             //reset animation
@@ -194,7 +225,7 @@ export default {
                 else this.IsTabActive = !this.IsTabActive;
             }
         },
-        AddToPlaylist() {
+        AddToPlaylist() {         
             const musicId = this.$route.query.music_id;
             console.log(musicId);
         },
@@ -240,6 +271,7 @@ export default {
                         recom_type: "itius",
                         item_id: music.video_id,
                         number_of_items: 20,
+                        filter: this.moodValue,
                     },
                 })
                 .then((response) => {
@@ -370,6 +402,51 @@ Add breakpoints
 
 Turn dimensions into ratios
 */
+.wrapper {
+    border-top: 5px solid #c3073f;
+    border-bottom: 5px solid #c3073f;
+    border-radius: 7px;
+    display: block;
+    width: 200px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 18px;
+    font-family: sans-serif;
+    text-decoration: none;
+    color: #ffff9b;
+    letter-spacing: 2px;
+    text-align: center;
+    position: relative;
+    transition: all .35s;
+    align-self: center;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+
+.wrapper span {
+    position: relative;
+    z-index: 2;
+}
+
+.wrapper:after {
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: #ff003b;
+    transition: all .35s;
+}
+
+.wrapper:hover {
+    color: #fff;
+}
+
+.wrapper:hover:after {
+    width: 100%;
+}
 
 .tabs {
     display: flex;

@@ -17,6 +17,7 @@ export const apiUrls = {
     musicList: '/api/music/music/',
     musicDetail: id => `/api/music/music/${id}/`,
     registerUser: '/api/user/register/',
-    loginUser: '/api/user/getToken/'
+    loginUser: '/api/user/getToken/',
+    sendRating: '/api/music/music/send_rating/' 
 };
 

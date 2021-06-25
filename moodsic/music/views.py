@@ -63,7 +63,7 @@ class MusicViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.Ge
             user_id=request.GET.get('user_id', 2),
             item_id=request.GET.get('item_id', 1),
             scenario=request.GET.get('scenario', 'main'),
-            r_filter=request.GET.get('r_filter', 'empty'),
+            r_filter=request.GET.get('filter', 'empty'),
             booster=request.GET.get('booster', 'empty'),
             number_of_items=int(request.GET.get('number_of_items', 10)),
         )
@@ -79,7 +79,11 @@ class MusicViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.Ge
             item_id=request.GET.get('item_id', 1),
         )
         rating = request.GET.get('rating')
-        recombee.add_rating(rating)
+        recombee.add_rating(float(rating))
+        return Response(status=status.HTTP_200_OK)
+
+    
+
 
     # @action(detail=False, pagination_class=SmallResultsSetPagination)
     # def item_to_user(self, request, *args, **kwargs):
