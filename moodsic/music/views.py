@@ -61,7 +61,7 @@ class MusicViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.Ge
         recombee = Recommendation(
             recom_type=request.GET.get('recom_type', 'itu'),
             user_id=request.GET.get('user_id', 2),
-            item_id=request.GET.get('item_id', 0),
+            item_id=request.GET.get('item_id', 1),
             scenario=request.GET.get('scenario', 'main'),
             r_filter=request.GET.get('r_filter', 'empty'),
             booster=request.GET.get('booster', 'empty'),
@@ -71,6 +71,15 @@ class MusicViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.Ge
         queryset = self.reorder(result)
         serializer = MusicCustomSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    @action(detail=False, methods=['GET'])
+    def send_rating(self, request, *args, **kwargs):
+        recombee = Recommendation(
+            user_id=request.GET.get('user_id', 2),
+            item_id=request.GET.get('item_id', 1),
+        )
+        rating = request.GET.get('rating')
+        recombee.add_rating(rating)
 
     # @action(detail=False, pagination_class=SmallResultsSetPagination)
     # def item_to_user(self, request, *args, **kwargs):

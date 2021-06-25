@@ -22,7 +22,7 @@ class Recommendation:
     }
 
     def __init__(self,
-                 recom_type,
+                 recom_type='iti',
                  user_id=0,
                  item_id=0,
                  scenario="main",
