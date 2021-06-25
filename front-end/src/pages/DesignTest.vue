@@ -46,13 +46,13 @@
           ></youtube-iframe>
         </div>
         <div class="actions-wrapper">
-          <div class="action-item bubbly-button " @click="AddToPlaylist; AnimateButton($event)">
+          <div class="action-item bubbly-button " @click="AnimateButton($event)">
             <img src="../assets/like.svg" />
           </div>
-          <div class="action-item bubbly-button " @click="AddToPlaylist; AnimateButton($event)">
+          <div class="action-item bubbly-button " @click=" AnimateButton($event)">
             <img src="../assets/dislike.svg" />
           </div>
-          <div class="action-item bubbly-button" @click="AddToPlaylist; AnimateButton($event)">
+          <div class="action-item bubbly-button" @click="AddToPlaylist($event)">
             <img src="../assets/heart.svg" />
           </div>
           <div class="action-item bubbly-button" @click="Share">
@@ -222,7 +222,8 @@ export default {
         else this.IsTabActive = !this.IsTabActive;
       }
     },
-    AddToPlaylist() {
+    AddToPlaylist(event) {
+      this.AnimateButton(event);
       const musicId = this.$route.query.music_id;
       console.log(musicId);
     },
