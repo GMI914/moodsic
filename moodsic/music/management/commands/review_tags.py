@@ -9,7 +9,7 @@ mood_descriptors = {
     "gloomy": ['low', 'disconsolate', 'drear', 'dreary', 'grim', 'dark', 'gloomy', 'dingy', 'sulky', 'dispirited',
                'gloomful', 'drab', 'down', 'sorry', 'down_in_the_mouth', 'downhearted', 'glooming', 'downcast',
                'low-spirited', 'depressed', 'blue', 'dismal'],
-    "cheerful": ['cheerful', 'pollyannaish', 'upbeat'],
+    "cheerful": ['cheerful', 'pollyannaish', 'upbeat', 'uplift'],
     "happy": ['glad', 'felicitous', 'happy', 'well-chosen'],
 }
 
