@@ -13,21 +13,22 @@ class Recommendation:
     }
     filters = {
         "empty": None,
-        "happy" : " 'mood' == 'happy'",
-        "cheerful" : " 'mood' == 'cheerful'",
-        "gloomy" : " 'mood' == 'gloomy'",
-        "sad" : " 'mood' == 'sad'",
+        "happy" : '"mood" == "happy"',
+        "cheerful" : '"mood" == "cheerful"',
+        "gloomy" : '"mood" == "gloomy"',
+        "sad" :  '"mood" == "sad"',
     }
 
     scenarios = {
-        "main": "main_music"
+        "empty": None,
+        "main": "main_music",
     }
 
     def __init__(self,
                  recom_type='iti',
                  user_id=0,
                  item_id=0,
-                 scenario="main",
+                 scenario="empty",
                  r_filter="empty",
                  booster="empty",
                  number_of_items=10

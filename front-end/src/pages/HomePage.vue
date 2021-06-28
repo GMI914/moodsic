@@ -265,40 +265,10 @@ export default {
                 this.$router.push({query: {music_id: music.video_id}});
                 this.newItemToItemList(music);
             }, 1);
-            authAjax()
-                .get(apiUrls.musicList, {
-                    params: {
-                        recom_type: "itius",
-                        item_id: music.video_id,
-                        number_of_items: 20,
-                        filter: this.moodValue,
-                    },
-                })
-                .then((response) => {
-                    this.ItemToUserList = response.data;
-                    this.ItemToUserList.filter((el) => el.video_id === music.video_id);
-                    this.ItemToUserList.unshift(music);
-                });
+           
         },
-        GetFavorite(music) {
-            setTimeout(() => {
-                this.CurrentMusic = music;
-                this.$router.push({query: {music_id: music.video_id}});
-                this.newItemToItemList(music);
-            }, 1);
-            authAjax()
-                .get(apiUrls.musicList, {
-                    params: {
-                        recom_type: "itius",
-                        item_id: music.video_id,
-                        number_of_items: 5,
-                    },
-                })
-                .then((response) => {
-                    this.FavoritesList = response.data;
-                    this.FavoritesList.filter((el) => el.video_id === music.video_id);
-                    this.FavoritesList.unshift(music);
-                });
+        GetFavorite() {
+           
         },
         PlayerStateChange(event) {
             if (event && event.data === 0) {
@@ -342,6 +312,8 @@ export default {
                     params: {
                         recom_type: "itu",
                         number_of_items: 5,
+                        scenario: "main",
+                        filter: "empty",
                     },
                 })
                 .then((response) => {
@@ -730,7 +702,7 @@ svg,
     height: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fill, 400px);
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
 .bottom-listing .playlist-item {

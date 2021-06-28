@@ -1,6 +1,6 @@
 from typing import Any
 
-from django.contrib.auth.models import User
+from user.models import User
 from django.core.management import BaseCommand
 from recombee_api_client.api_client import RecombeeClient
 from recombee_api_client.api_requests import *
@@ -18,7 +18,6 @@ class Command(BaseCommand):
                     user.id,
                     {
                         "username": user.username,
-                        "age": 22,
                     }
                     , cascade_create=True
                 )
