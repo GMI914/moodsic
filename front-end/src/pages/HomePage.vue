@@ -1,7 +1,9 @@
 <template>
     <div class="MainContainer">
         <div class="left-recommended">
-            <Ghost></Ghost>
+            <div class="ghost">
+                <Ghost></Ghost>
+            </div>
             <div class="question-box">
                 <p>
                     How would you <br/>
@@ -85,7 +87,7 @@
                 <template v-if="IsTabActive">
                     <template v-for="(music, index) in ItemToUserList">
                         <div class="playlist-item" v-if="music.image_url" :key="index">
-                            <a @click="SelectItemToUser(music); MarkAsListened(index)">
+                            <a @click="SelectItemToUser(music)">
                                 <div class="thumbnail-meta-container">
                                     <div class="thumbnail-container">
                                         <img :src="music.image_url"/>
@@ -105,7 +107,7 @@
                 <template v-else>
                     <template v-for="(music, index) in FavoritesList">
                         <div class="playlist-item" v-if="music.image_url" :key="index">
-                            <a @click="SelectItemToUser(music); MarkAsListened(index)">
+                            <a @click="SelectItemToUser(music)">
                                 <div class="thumbnail-meta-container">
                                     <div class="thumbnail-container">
                                         <img :src="music.image_url"/>
@@ -237,18 +239,6 @@ export default {
             window.open(link, "_blank");
         },
         
-        MarkAsListened(index)
-        {
-            //maxinaciebia nawarmoebi imistvis rom stili sworad sheicvalos ukve mosmenil simgeraze
-            let ListOfPlayListItems = Array.from(document.getElementsByClassName('playlist-item'))
-            ListOfPlayListItems.forEach( (element) => {
-                if(ListOfPlayListItems.indexOf(element) == index-1)
-                {
-                    element.childNodes[0    ].classList.add('playlist-item-listened')      
-                }
-                console.log(index)
-                })
-        },
         SelectItemToUser(music) {
 
             this.CurrentMusic = null;
@@ -274,7 +264,6 @@ export default {
             if (event && event.data === 0) {
                 const index = this.ItemToUserList.findIndex((el) => {
                     //Here, this logic is wrong
-                    this.MarkAsListened(this.ItemToUserList.indexOf(el));
 
                     return el.video_id === this.CurrentMusic.video_id;
                 });
@@ -521,7 +510,6 @@ Turn dimensions into ratios
     border-bottom: 6px solid #c3073f;
     color: #4e4e50;
     box-shadow: 5px 5px 10px 5px rgba(9, 32, 71, 0.6);
-    min-height: 400px;
     height: fit-content;
 }
 
@@ -566,7 +554,6 @@ svg,
     border-bottom: 6px solid #c3073f;
     color: #4e4e50;
     box-shadow: 5px 5px 10px 5px rgba(9, 32, 71, 0.6);
-    min-height: 350px;
     height: fit-content;
 }
 
@@ -596,7 +583,7 @@ svg,
     box-shadow: 5px 5px 10px 5px rgba(9, 32, 71, 0.6);
     margin-top: 24px;
     margin-bottom: 24px;
-    min-height: 350px;
+    
     height: fit-content;
 }
 
@@ -739,4 +726,66 @@ ul li:hover {
     border-radius: 3px;
     cursor: pointer;
 }
+
+.ghost{
+
+}
+
+@media (max-width:880px)
+{
+     .MainContainer
+    {
+        overflow:hidden;
+    }
+    .tabs
+    {
+        font-size: 1.8vw;
+    }
+    .bottom-listing
+    {
+        display: none;
+    }
+    .MainContainer
+    {
+        display:flex;
+        flex-direction: column;
+    }
+    
+    .right-recommended
+    {
+        max-height: 300px;
+        min-width: 318px;
+        width: 69%;
+    }
+    
+    .left-recommended
+    {
+        min-width: 318px;
+    }
+
+    .center
+    {
+        order:-1;
+        min-width: 318px;
+    }
+
+    .ghost
+    {
+        display:none;
+    }
+
+    .question-box ul
+    {
+        margin:0 auto;
+        padding: 0;
+        margin: 0 5px 0 5px;
+
+    }
+    li 
+    {
+        display: inline;
+    }
+    
+}
+
 </style>
