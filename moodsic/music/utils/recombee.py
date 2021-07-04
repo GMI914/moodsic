@@ -13,19 +13,22 @@ class Recommendation:
     }
     filters = {
         "empty": None,
-        "preference_filter1": "filter by some value",
-        "preference_filter2": "filter by some value",
+        "happy" : '"mood" == "happy"',
+        "cheerful" : '"mood" == "cheerful"',
+        "gloomy" : '"mood" == "gloomy"',
+        "sad" :  '"mood" == "sad"',
     }
 
     scenarios = {
-        "main": "main_music"
+        "empty": None,
+        "main": "main_music",
     }
 
     def __init__(self,
-                 recom_type,
+                 recom_type='iti',
                  user_id=0,
                  item_id=0,
-                 scenario="main",
+                 scenario="empty",
                  r_filter="empty",
                  booster="empty",
                  number_of_items=10
@@ -34,26 +37,41 @@ class Recommendation:
         self.item_id = item_id
         self.recom_type = recom_type
         self.scenario = self.scenarios[scenario]
-        self.r_filter = self.filters[r_filter]
+        self.computed_filter = self.compute_filter(r_filter)
         self.booster = self.boosters[booster]
         self.number_of_items = number_of_items * 3
+
+
+    def compute_filter(self, client_filter):
+        if client_filter=="happy" :
+            self.computed_filter=self.filters["happy"]
+        elif client_filter=="cheerful" :
+            self.computed_filter=self.filters["cheerful"]
+        elif client_filter=="gloomy" :
+            self.computed_filter=self.filters["gloomy"]
+        elif client_filter=="sad" :
+            self.computed_filter=self.filters["sad"] 
+        else:
+            self.computed_filter=self.filters["empty"]
+           
+
 
     def get_result(self):
         if self.recom_type == "itu":
             return client.send(RecommendItemsToUser(
                 user_id=self.user_id, count=self.number_of_items, scenario=self.scenario, cascade_create=False,
-                filter=self.r_filter, booster=self.booster))
+                filter=self.computed_filter, booster=self.booster))
         elif self.recom_type == "iti":
             return client.send(RecommendItemsToItem(
                 item_id=self.item_id, target_user_id=self.user_id, count=self.number_of_items, scenario=self.scenario,
-                cascade_create=False, filter=self.r_filter, booster=self.booster))
+                cascade_create=False, filter=self.computed_filter, booster=self.booster))
         elif self.recom_type == "itius":
             result_1 = client.send(RecommendItemsToItem(
                 item_id=self.item_id, target_user_id=self.user_id, count=self.number_of_items, scenario=self.scenario,
-                cascade_create=False, filter=self.r_filter, booster=self.booster))
+                cascade_create=False, filter=self.computed_filter, booster=self.booster))
             result_2 = client.send(RecommendItemsToUser(
                 user_id=self.user_id, count=self.number_of_items, scenario=self.scenario, cascade_create=False,
-                filter=self.r_filter, booster=self.booster))
+                filter=self.computed_filter, booster=self.booster))
             return {'recomms': result_1.get('recomms', []) + result_2.get('recomms', [])}
 
     def add_rating(self, rating):

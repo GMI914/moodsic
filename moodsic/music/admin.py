@@ -6,7 +6,12 @@ from music.models import VideoTags, VideoMood, VideoGenre, Music
 class VideoTagsInline(admin.StackedInline):
     model = Music.tags.through
     extra = 1
-
+    def has_change_permission(self, request, obj=None):
+        return False     
+    def has_add_permission(self, request, obj=None):        
+         return False      
+    def has_delete_permission(self, request, obj=None):        
+         return False
 
 class VideoMoodInline(admin.StackedInline):
     model = Music.mood.through
@@ -25,8 +30,10 @@ class VideoTagsAdmin(admin.ModelAdmin):
 
 @admin.register(Music)
 class MusicAdmin(admin.ModelAdmin):
-    pass
-    # inlines = [VideoTagsInline, VideoMoodInline, VideoGenreInline]
+    list_display = ["title", "video_id"]
+    list_filter = ["video_id", "id"]
+    # inlines = [VideoTagsInline,]
+    readonly_fields = ["tags", "mood", "genre"]
 
 
 admin.site.register([VideoMood, VideoGenre])
