@@ -41,7 +41,11 @@ class Command(BaseCommand):
         df_t.insert(2, "id", df.id)
         df_t.insert(2, "channel_id", df.channel_id)
 
-        # music = Music.objects.filter(video_id="").get()
-        # if music.custom_rating == 0:
-        #     music.custom_rating = 0
-        #     music.save()
+        df_t.insert(0, "MOOD", -1)
+        df_t.MOOD = df_t.cluster.map({2: 1, 3: 2, 0: 3, 1: 4})
+
+        for (index, (video_id, mood)) in df_t[["id", "MOOD"]].iterrows():
+            music = Music.objects.filter(id=video_id).get()
+            if music and music.custom_rating == 0:
+                music.custom_rating = mood
+                music.save()
