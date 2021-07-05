@@ -811,7 +811,7 @@ ul li:hover {
     }
 
     .tabs {
-        font-size: 1.8vw;
+        font-size: 2.3vw;
     }
 
     .bottom-listing {
