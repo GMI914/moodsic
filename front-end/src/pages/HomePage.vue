@@ -55,13 +55,13 @@
                     ></youtube-iframe>
                 </div>
                 <div class="actions-wrapper">
-                    <div class="action-item" @click="SendRating('like'); AnimateButton($event)">
+                    <div class="action-item" @click="SendRating('like')">
                         <img src="../assets/like.svg"/>
                     </div>
-                    <div class="action-item" @click="SendRating('dislike'); AnimateButton($event)">
+                    <div class="action-item" @click="SendRating('dislike')">
                         <img src="../assets/dislike.svg"/>
                     </div>
-                    <div class="action-item" @click="AddToPlaylist(); AnimateButton($event);"
+                    <div class="action-item" @click="AddToPlaylist()"
                          :class="{'active': isFavorite(CurrentMusic)}">
                         <img src="../assets/heart.svg"/>
                     </div>
@@ -163,6 +163,7 @@ import token from "../utils/token"
 import {apiUrls, authAjax} from "../store/api/urls";
 import Ghost from "../components/Ghost";
 
+
 export default {
     name: "HomePage",
     props: {msg: String},
@@ -212,17 +213,6 @@ export default {
             } else {
                 console.log('error')
             }
-        },
-        AnimateButton(e) {
-            e.preventDefault;
-            //reset animation
-            e.target.parentNode.classList.remove("animate");
-
-            e.target.parentNode.classList.add("animate");
-            setTimeout(function () {
-                e.target.parentNode.classList.remove("animate");
-            }, 1000);
-
         },
         ChangeTab(tab) {
             if (tab === "recomended") {
@@ -578,7 +568,7 @@ svg,
 .action-item {
     margin: 5px;
     align-items: center;
-    background-color: #e7e7e7;
+    background-color: #c3073f;
     width: 35px;
     height: 35px;
     border-radius: 20px;
@@ -586,29 +576,14 @@ svg,
     transition: all .35s;
     position: relative;
     display: block;
-    border: solid 2px rgba(9, 32, 71, 0.6);
+    border: solid 2px rgba(40, 5, 44, 0.993);
 }
 
 .action-item:hover, .action-item.active {
-    color: #fff;
+   background-color: #fff;
 }
 
-.action-item:after {
-    position: absolute;
-    content: "";
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #c3073f;
-    border-radius: 20px;
-    transition: all .35s;
 
-}
-
-.action-item:hover:after, .action-item.active:after {
-    height: 0;
-}
 
 .left-recommended {
     background-color: #262626;
@@ -805,7 +780,7 @@ ul li:hover {
 
 }
 
-@media (max-width: 880px) {
+@media (max-width: 1080px) {
     .MainContainer {
         overflow: hidden;
     }
