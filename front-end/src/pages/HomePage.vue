@@ -244,15 +244,6 @@ export default {
                 this.$route.query.music_id;
             window.open(link, "_blank");
         },
-        MarkAsListened(index) {
-            //maxinaciebia nawarmoebi imistvis rom stili sworad sheicvalos ukve mosmenil simgeraze
-            let ListOfPlayListItems = Array.from(document.getElementsByClassName('playlist-item'))
-            ListOfPlayListItems.forEach((element) => {
-                if (ListOfPlayListItems.indexOf(element) == index - 1) {
-                    element.childNodes[0].classList.add('playlist-item-listened')
-                }
-            })
-        },
         SelectItemToUser(music) {
 
             this.CurrentMusic = null;
