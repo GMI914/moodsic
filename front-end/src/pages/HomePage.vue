@@ -1,5 +1,24 @@
 <template>
-  <div class="MainContainer">
+  <div class="MainContainer" >
+    <div class="extended-content" v-if="ToggleShare">
+      <div class="close" @click="Extend">
+        <img src="../assets/delete.svg" />
+      </div>
+      <div class="extended-content-items">
+        <div @click="Share('Facebook')">
+          <img src="../assets/facebook.svg" />
+        </div>
+        <div @click="Share('Twitter')">
+          <img src="../assets/twitter.svg" />
+        </div>
+        <div @click="Share('LinkedIn')">
+          <img src="../assets/linkedin.svg" />
+        </div>
+        <div>
+          <img src="../assets/copy.svg" />
+        </div>
+      </div>
+    </div>
     <div class="left-recommended">
       <router-link class="logout-container" to="/login">
         <img src="../assets/logout.svg" />
@@ -99,14 +118,6 @@
           </div>
           <div class="action-item" @click="Extend">
             <img src="../assets/share.svg" />
-
-            <div class="extended-content">
-              <ul>
-                <li @click="Share" class="Facebook">Facebook</li>
-                <li @click="Share" class="Twitter">Twitter</li>
-                <li @click="Share" class="LinkedIn">LinkedIn</li>
-              </ul>
-            </div>
           </div>
         </div>
       </div>
@@ -203,7 +214,6 @@
 import token from "../utils/token";
 import { apiUrls, authAjax } from "../store/api/urls";
 import Ghost from "../components/Ghost";
-import $ from "jquery";
 
 export default {
   name: "HomePage",
@@ -222,11 +232,12 @@ export default {
       IsTabActive: true,
       moodValue: null,
       user: {},
+      ToggleShare: false,
     };
   },
   methods: {
     Extend() {
-      $(".extended-content").toggle();
+      this.ToggleShare = !this.ToggleShare;
     },
     SendRating(value) {
       if (value === "like") {
@@ -276,24 +287,21 @@ export default {
           this.getUser();
         });
     },
-    Share(event) {
-    
-    const URL = "https://www.youtube.com/watch?v=" + this.$route.query.music_id;
-    console.log(event.target.classList)
+    Share(media) {
+      const URL =
+        "https://www.youtube.com/watch?v=" + this.$route.query.music_id;
 
-        if(event.target.classList.value == "Facebook")
-        {  
-            const link ="https://www.facebook.com/sharer/sharer.php?u=" + URL;    
-            window.open(link, "_blank");
-        }else if(event.target.classList.value == "Twitter")
-        {
-            const link = "https://twitter.com/intent/tweet?url=" + "1" + "&text=" + URL;
-            window.open(link, "_blank");
-        }else if(event.target.classList.value == "LinkedIn")
-        {
-            const link = "https://www.linkedin.com/shareArticle?mini=true&url=" + URL;
-            window.open(link, "_blank");
-        }
+      if (media == "Facebook") {
+        const link = "https://www.facebook.com/sharer/sharer.php?u=" + URL;
+        window.open(link, "_blank");
+      } else if (media == "Twitter") {
+        const link = "https://twitter.com/intent/tweet?url=" + "&text=" + URL;
+        window.open(link, "_blank");
+      } else if (media == "LinkedIn") {
+        const link =
+          "https://www.linkedin.com/shareArticle?mini=true&url=" + URL;
+        window.open(link, "_blank");
+      }
     },
 
     SelectItemToUser(music) {
@@ -874,6 +882,52 @@ ul li:hover {
   z-index: 10000;
 }
 
+.extended-content {
+  display: flex;
+  flex-direction: row;
+  position: fixed;
+  left: 30%;
+  right: 30%;
+  top: 25%;
+  border-radius: 5px;
+  height: 250px;
+  width: 40%;
+  z-index: 100000;
+  background-color: #222024f1;
+  overflow: hidden;
+}
+
+.extended-content img {
+  display: inline;
+  
+}
+
+.extended-content img:hover {
+  cursor: pointer;
+}
+.extended-content-items {
+  display: flex;
+  justify-content: center;
+}
+
+.extended-content-items img {
+  width: 80px;
+  margin-top: 70px;
+  margin-right: 60px;
+}
+
+.close{
+    width: 50px;
+}
+
+.close img {
+  position: relative;
+  bottom: 45px;
+  right: 25px;
+  width: 40px;
+  margin: 30px;
+}
+
 @media (max-width: 1080px) {
   .MainContainer {
     overflow: hidden;
@@ -942,39 +996,5 @@ ul li:hover {
     height: 40px;
     border-radius: 30px;
   }
-}
-
-.extended-content {
-  font-size: 1vw;
-  display: none;
-  position: absolute;
-  left: 110%;
-  top: 17%;
-  border-radius: 5px;
-  min-width: 50px;
-  z-index: 100;
-
-  background-color: #130f40;
-  background-image: linear-gradient(315deg, #092047 10%, #1a1a1d 74%);
-  border-top: 6px solid;
-  border-image-source: linear-gradient(147deg, #000000 0%, #04619f 74%);
-
-  overflow: hidden;
-}
-
-.extended-content ul {
-  color: #05d9e8;
-  list-style-type: none;
-  padding-right: 10px;
-}
-.extended-content ul li {
-  border-radius: 9px;
-  margin-top: 5px;
-}
-
-.extended-content ul li:hover {
-  background-color: #254f64;
-  border-radius: 3px;
-  cursor: pointer;
 }
 </style>
