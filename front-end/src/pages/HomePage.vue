@@ -97,12 +97,21 @@
           >
             <img src="../assets/heart.svg" />
           </div>
-          <div class="action-item" @click="Share">
+          <div class="action-item" @click="Extend">
             <img src="../assets/share.svg" />
+
+            <div class="extended-content">
+              <ul>
+                <li @click="Share" class="Facebook">Facebook</li>
+                <li @click="Share" class="Twitter">Twitter</li>
+                <li @click="Share" class="LinkedIn">LinkedIn</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
     </div>
+
     <div class="right-recommended">
       <div class="tabs">
         <div
@@ -194,6 +203,7 @@
 import token from "../utils/token";
 import { apiUrls, authAjax } from "../store/api/urls";
 import Ghost from "../components/Ghost";
+import $ from "jquery";
 
 export default {
   name: "HomePage",
@@ -215,6 +225,9 @@ export default {
     };
   },
   methods: {
+    Extend() {
+      $(".extended-content").toggle();
+    },
     SendRating(value) {
       if (value === "like") {
         authAjax()
@@ -263,13 +276,26 @@ export default {
           this.getUser();
         });
     },
-    Share() {
-      const link =
-        "https://www.facebook.com/sharer/sharer.php?u=" +
-        "https://www.youtube.com/watch?v=" +
-        this.$route.query.music_id;
-      window.open(link, "_blank");
+    Share(event) {
+    
+    const URL = "https://www.youtube.com/watch?v=" + this.$route.query.music_id;
+    console.log(event.target.classList)
+
+        if(event.target.classList.value == "Facebook")
+        {  
+            const link ="https://www.facebook.com/sharer/sharer.php?u=" + URL;    
+            window.open(link, "_blank");
+        }else if(event.target.classList.value == "Twitter")
+        {
+            const link = "https://twitter.com/intent/tweet?url=" + "1" + "&text=" + URL;
+            window.open(link, "_blank");
+        }else if(event.target.classList.value == "LinkedIn")
+        {
+            const link = "https://www.linkedin.com/shareArticle?mini=true&url=" + URL;
+            window.open(link, "_blank");
+        }
     },
+
     SelectItemToUser(music) {
       this.CurrentMusic = null;
       setTimeout(() => {
@@ -287,29 +313,25 @@ export default {
       }, 1);
     },
     PlayerStateChange(event) {
-       if(this.IsTabActive)
-            {    
-                if (event && event.data === 0) {
-                    const index = this.ItemToUserList.findIndex((el) => {
-
-                        return el.video_id === this.CurrentMusic.video_id;
-                    });
-                    if (this.ItemToUserList.length > index + 1) {
-                        this.SelectItemToUser(this.ItemToUserList[index + 1]);
-                    }
-                }
-            } else {
-                if (event && event.data === 0) {
-                    const index = this.user.favorite.findIndex((el) => {
-
-                        return el.video_id === this.CurrentMusic.video_id;
-                    });
-                    if (this.user.favorite.length > index + 1) {
-                        this.SelectItemToUser(this.user.favorite[index + 1]);
-                    }
-                
-            }
+      if (this.IsTabActive) {
+        if (event && event.data === 0) {
+          const index = this.ItemToUserList.findIndex((el) => {
+            return el.video_id === this.CurrentMusic.video_id;
+          });
+          if (this.ItemToUserList.length > index + 1) {
+            this.SelectItemToUser(this.ItemToUserList[index + 1]);
+          }
         }
+      } else {
+        if (event && event.data === 0) {
+          const index = this.user.favorite.findIndex((el) => {
+            return el.video_id === this.CurrentMusic.video_id;
+          });
+          if (this.user.favorite.length > index + 1) {
+            this.SelectItemToUser(this.user.favorite[index + 1]);
+          }
+        }
+      }
     },
     resizeEvent() {
       this.enablePlayer = false;
@@ -920,5 +942,39 @@ ul li:hover {
     height: 40px;
     border-radius: 30px;
   }
+}
+
+.extended-content {
+  font-size: 1vw;
+  display: none;
+  position: absolute;
+  left: 110%;
+  top: 17%;
+  border-radius: 5px;
+  min-width: 50px;
+  z-index: 100;
+
+  background-color: #130f40;
+  background-image: linear-gradient(315deg, #092047 10%, #1a1a1d 74%);
+  border-top: 6px solid;
+  border-image-source: linear-gradient(147deg, #000000 0%, #04619f 74%);
+
+  overflow: hidden;
+}
+
+.extended-content ul {
+  color: #05d9e8;
+  list-style-type: none;
+  padding-right: 10px;
+}
+.extended-content ul li {
+  border-radius: 9px;
+  margin-top: 5px;
+}
+
+.extended-content ul li:hover {
+  background-color: #254f64;
+  border-radius: 3px;
+  cursor: pointer;
 }
 </style>
