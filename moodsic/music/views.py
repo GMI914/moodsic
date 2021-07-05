@@ -11,15 +11,11 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 
-
 from music.filters import MusicFilter
 from music.models import VideoTags, VideoMood, VideoGenre, Music
 from music.serializers import VideoTagsSerializer, VideoMoodSerializer, VideoGenreSerializer, MusicSerializer, \
     MusicDetailSerializer, MusicCustomSerializer
 from music.utils.recombee import Recommendation
-
-
-
 
 
 class SmallResultsSetPagination(PageNumberPagination):
@@ -39,7 +35,7 @@ class SmallResultsSetPagination(PageNumberPagination):
 
 
 class MusicViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
-    authentication_classes = [TokenAuthentication,]
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [IsAuthenticated, ]
     queryset = Music.objects.all().prefetch_related('tags', 'mood', 'genre')
     filter_backends = (DjangoFilterBackend,)
@@ -77,7 +73,7 @@ class MusicViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.Ge
         queryset = Music.objects.filter(video_id__in=[video.get('id') for video in results]).order_by(preserved)
         serializer = MusicCustomSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     @action(detail=False, methods=['GET'])
     def send_rating(self, request, *args, **kwargs):
         recombee = Recommendation(
@@ -87,9 +83,6 @@ class MusicViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.Ge
         rating = request.GET.get('rating')
         recombee.add_rating(float(rating))
         return Response(status=status.HTTP_200_OK)
-
-    
-
 
     # @action(detail=False, pagination_class=SmallResultsSetPagination)
     # def item_to_user(self, request, *args, **kwargs):

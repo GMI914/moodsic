@@ -1,7 +1,7 @@
 from django.contrib.auth import logout
 from django.db import transaction
 from rest_framework import status
-from rest_framework.authentication import SessionAuthentication
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import permission_classes, authentication_classes, api_view
 from rest_framework.generics import RetrieveAPIView, CreateAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -31,7 +31,7 @@ class CreateUserView(CreateAPIView):
 
 
 @api_view(["POST"])
-@authentication_classes([SessionAuthentication])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def user_logout(request):
     logout(request)
@@ -40,6 +40,7 @@ def user_logout(request):
 
 class UserView(RetrieveAPIView):
     permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication, ]
     serializer_class = UserSerializer
 
     def get_object(self):
