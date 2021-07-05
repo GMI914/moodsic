@@ -12,22 +12,25 @@
                 <ul>
                     <label>
                         <li>
-                            <input id="happy" name="mood" type="radio" value="happy" v-model="moodValue"/> <i>Happy</i>
+                            <input id="happy" name="mood" type="radio" value="happy" v-model="moodValue"/>
+                            <i> Happy</i>
                         </li>
                     </label>
                     <label>
                         <li>
-                            <input id="cheerful" name="mood" type="radio" value="cheerful" v-model="moodValue"/> <i>Cheerful</i>
+                            <input id="cheerful" name="mood" type="radio" value="cheerful" v-model="moodValue"/>
+                            <i> Cheerful</i>
                         </li>
                     </label>
                     <label>
                         <li>
                             <input id="gloomy" name="mood" type="radio" value="gloomy" v-model="moodValue"/>
-                            <i>Gloomy</i>
+                            <i> Gloomy</i>
                         </li>
                     </label>
                     <label>
-                        <li><input id="sad" name="mood" type="radio" value="sad" v-model="moodValue"/> <i>Sad</i></li>
+                        <li><input id="sad" name="mood" type="radio" value="sad" v-model="moodValue"/>
+                            <i> Sad</i></li>
                     </label>
                 </ul>
             </div>
@@ -55,13 +58,13 @@
                     <div class="action-item" @click="SendRating('like'); AnimateButton($event)">
                         <img src="../assets/like.svg"/>
                     </div>
-                    <div class="action-item  " @click="SendRating('dislike'); AnimateButton($event)">
+                    <div class="action-item" @click="SendRating('dislike'); AnimateButton($event)">
                         <img src="../assets/dislike.svg"/>
                     </div>
-                    <div class="action-item " @click="AddToPlaylist(); AnimateButton($event);">
+                    <div class="action-item" @click="AddToPlaylist(); AnimateButton($event);">
                         <img src="../assets/heart.svg"/>
                     </div>
-                    <div class="action-item " @click="Share">
+                    <div class="action-item" @click="Share">
                         <img src="../assets/share.svg"/>
                     </div>
                 </div>
@@ -74,7 +77,7 @@
                     @click="ChangeTab('recomended')"
                     :class="{ active: IsTabActive }"
                 >
-                    Recomended
+                    Recommended
                 </div>
                 <div
                     class="tab-favorite"
@@ -95,9 +98,9 @@
                                     </div>
                                     <div class="meta">
                                         <h4 class="title-style">
-                      <span class="video-title">
-                        {{ music.title }}
-                      </span>
+                                            <span class="video-title">
+                                                {{ music.title }}
+                                            </span>
                                         </h4>
                                     </div>
                                 </div>
@@ -115,9 +118,9 @@
                                     </div>
                                     <div class="meta">
                                         <h4 class="title-style">
-                      <span class="video-title">
-                        {{ music.title }}
-                      </span>
+                                            <span class="video-title">
+                                                {{ music.title }}
+                                            </span>
                                         </h4>
                                     </div>
                                 </div>
@@ -141,9 +144,9 @@
                             </div>
                             <div class="meta">
                                 <h4 class="title-style">
-                  <span class="video-title">
-                    {{ music.title }}
-                  </span>
+                                    <span class="video-title">
+                                        {{ music.title }}
+                                    </span>
                                 </h4>
                             </div>
                         </div>
@@ -429,15 +432,15 @@ Turn dimensions into ratios
     width: 0;
     height: 100%;
     background: #ff003b;
-    border-radius:20px;
+    border-radius: 20px;
     transition: all .35s;
 }
 
-.wrapper:hover{
+.wrapper:hover {
     color: #fff;
 }
 
-.wrapper:hover:after{
+.wrapper:hover:after {
     width: 100%;
 }
 
@@ -552,14 +555,12 @@ Turn dimensions into ratios
 }
 
 
-
-
 svg,
 .action-item img {
-    position:relative;
+    position: relative;
     width: 70%;
     height: 100%;
-    z-index:10000;
+    z-index: 10000;
 }
 
 .actions-wrapper {
@@ -578,16 +579,15 @@ svg,
     cursor: pointer;
     transition: all .35s;
     position: relative;
-    display:block;
+    display: block;
     border: solid 2px rgba(9, 32, 71, 0.6);
 }
 
-.action-item:hover
-{
+.action-item:hover {
     color: #fff;
 }
-.action-item:after
-{
+
+.action-item:after {
     position: absolute;
     content: "";
     top: 0;
@@ -595,14 +595,13 @@ svg,
     width: 100%;
     height: 100%;
     background-color: #c3073f;
-    border-radius:20px;
+    border-radius: 20px;
     transition: all .35s;
 
 }
 
 
-.action-item:hover:after
-{
+.action-item:hover:after {
     height: 0;
 }
 
@@ -650,7 +649,7 @@ svg,
     box-shadow: 5px 5px 10px 5px rgba(9, 32, 71, 0.6);
     margin-top: 24px;
     margin-bottom: 24px;
-    
+
     /*height: fit-content;*/
     height: 470px;
 }
@@ -797,67 +796,60 @@ ul li:hover {
     cursor: pointer;
 }
 
-.ghost{
+.ghost {
 
 }
 
-@media (max-width:880px)
-{
-     .MainContainer
-    {
-        overflow:hidden;
+@media (max-width: 880px) {
+    .MainContainer {
+        overflow: hidden;
     }
-    .tabs
-    {
+
+    .tabs {
         font-size: 1.8vw;
     }
-    .bottom-listing
-    {
+
+    .bottom-listing {
         display: none;
     }
-    .MainContainer
-    {
-        display:flex;
+
+    .MainContainer {
+        display: flex;
         flex-direction: column;
     }
-    
-    .right-recommended
-    {
+
+    .right-recommended {
         min-width: 318px;
         width: 69%;
-        height:fit-content;
+        height: fit-content;
     }
-    
-    .left-recommended
-    {
+
+    .left-recommended {
         min-width: 318px;
         height: fit-content;
     }
 
-    .center
-    {
-        order:-1;
+    .center {
+        order: -1;
         min-width: 318px;
         height: fit-content;
     }
 
-    .ghost
-    {
-        display:none;
+    .ghost {
+        display: none;
     }
 
-    .question-box ul
-    {
-        margin:0 auto;
+    .question-box ul {
+        margin: 0 auto;
         padding: 0;
         margin: 0 5px 0 5px;
 
     }
-    li 
-    {
+
+    li {
         display: inline;
     }
-    
+
 }
 
 </style>
