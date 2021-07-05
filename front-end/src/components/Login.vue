@@ -4,12 +4,12 @@
     <template v-if="errorList.username">
         <span class="error-text" v-for="error in errorList.username" :key="error">{{ error }}</span>
     </template>
-    <input type="text" v-model="LoginData.username"/>
+    <input type="text" v-model="LoginData.username" name="username"/>
     <p>Password</p>
     <template v-if="errorList.password">
         <span class="error-text" v-for="error in errorList.password" :key="error">{{ error }}</span>
     </template>
-    <input type="password" v-model="LoginData.password"/>
+    <input type="password" v-model="LoginData.password" name="password"/>
     <template v-if="errorList.non_field_errors">
         <span class="error-text" v-for="error in errorList.non_field_errors" :key="error">{{ error }}</span>
     </template>
