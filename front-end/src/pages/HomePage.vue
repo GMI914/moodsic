@@ -51,16 +51,16 @@
                     ></youtube-iframe>
                 </div>
                 <div class="actions-wrapper">
-                    <div class="action-item bubbly-button " @click="SendRating('like'); AnimateButton($event)">
+                    <div class="action-item" @click="SendRating('like'); AnimateButton($event)">
                         <img src="../assets/like.svg"/>
                     </div>
-                    <div class="action-item bubbly-button " @click="SendRating('dislike'); AnimateButton($event)">
+                    <div class="action-item  " @click="SendRating('dislike'); AnimateButton($event)">
                         <img src="../assets/dislike.svg"/>
                     </div>
-                    <div class="action-item bubbly-button" @click="AddToPlaylist(); AnimateButton($event);">
+                    <div class="action-item " @click="AddToPlaylist(); AnimateButton($event);">
                         <img src="../assets/heart.svg"/>
                     </div>
-                    <div class="action-item bubbly-button" @click="Share">
+                    <div class="action-item " @click="Share">
                         <img src="../assets/share.svg"/>
                     </div>
                 </div>
@@ -69,14 +69,14 @@
         <div class="right-recommended">
             <div class="tabs">
                 <div
-                    class="tab-recomended bubbly-button"
+                    class="tab-recomended"
                     @click="ChangeTab('recomended')"
                     :class="{ active: IsTabActive }"
                 >
                     Recomended
                 </div>
                 <div
-                    class="tab-favorite bubbly-button"
+                    class="tab-favorite"
                     @click="ChangeTab('favorite')"
                     :class="{ active: !IsTabActive }"
                 >
@@ -157,7 +157,6 @@
 import token from "../utils/token"
 import {apiUrls, authAjax} from "../store/api/urls";
 import Ghost from "../components/Ghost";
-import "../../design/bublebutton.scss";
 
 export default {
     name: "HomePage",
@@ -398,14 +397,15 @@ Turn dimensions into ratios
     width: 0;
     height: 100%;
     background: #ff003b;
+    border-radius:20px;
     transition: all .35s;
 }
 
-.wrapper:hover {
+.wrapper:hover{
     color: #fff;
 }
 
-.wrapper:hover:after {
+.wrapper:hover:after{
     width: 100%;
 }
 
@@ -510,7 +510,8 @@ Turn dimensions into ratios
     border-bottom: 6px solid #c3073f;
     color: #4e4e50;
     box-shadow: 5px 5px 10px 5px rgba(9, 32, 71, 0.6);
-    height: fit-content;
+    /*height: fit-content;*/
+    height: 340px;
 }
 
 .music-player {
@@ -518,10 +519,15 @@ Turn dimensions into ratios
     flex-direction: column;
 }
 
+
+
+
 svg,
 .action-item img {
+    position:relative;
     width: 70%;
     height: 100%;
+    z-index:10000;
 }
 
 .actions-wrapper {
@@ -533,11 +539,39 @@ svg,
 .action-item {
     margin: 5px;
     align-items: center;
-    background-color: #c3073f;
+    background-color: #e7e7e7;
     width: 35px;
     height: 35px;
     border-radius: 20px;
     cursor: pointer;
+    transition: all .35s;
+    position: relative;
+    display:block;
+    border: solid 2px rgba(9, 32, 71, 0.6);
+}
+
+.action-item:hover
+{
+    color: #fff;
+}
+.action-item:after
+{
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #c3073f;
+    border-radius:20px;
+    transition: all .35s;
+
+}
+
+
+.action-item:hover:after
+{
+    height: 0;
 }
 
 .left-recommended {
@@ -554,7 +588,8 @@ svg,
     border-bottom: 6px solid #c3073f;
     color: #4e4e50;
     box-shadow: 5px 5px 10px 5px rgba(9, 32, 71, 0.6);
-    height: fit-content;
+    /* height: fit-content; */
+    height: 470px;
 }
 
 .playlist-items::-webkit-scrollbar {
@@ -584,14 +619,16 @@ svg,
     margin-top: 24px;
     margin-bottom: 24px;
     
-    height: fit-content;
+    /*height: fit-content;*/
+    height: 470px;
 }
 
 .playlist-items {
     overflow-y: auto;
-    height: 333px;
+    height: 400px;
     font-size: 10px;
     display: block;
+    margin-top: 10px;
 }
 
 .playlist-item {
@@ -622,6 +659,7 @@ svg,
     flex-basis: auto;
     flex-grow: 0;
     flex-shrink: 0;
+
 }
 
 .thumbnail-container img {
@@ -753,20 +791,22 @@ ul li:hover {
     
     .right-recommended
     {
-        max-height: 300px;
         min-width: 318px;
         width: 69%;
+        height:fit-content;
     }
     
     .left-recommended
     {
         min-width: 318px;
+        height: fit-content;
     }
 
     .center
     {
         order:-1;
         min-width: 318px;
+        height: fit-content;
     }
 
     .ghost
