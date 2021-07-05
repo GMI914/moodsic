@@ -11,6 +11,11 @@ from rest_framework.response import Response
 from user.models import User
 from user.serializer import UserSerializer
 
+from recombee_api_client.api_client import RecombeeClient
+from recombee_api_client.api_requests import *
+
+client = RecombeeClient('moodsic-dev', 'Pb4MhOK6751HmdEGmvISdFJqXjLDWEtVkyb2AIY4Cn1EL3vQWy9V0B236OGEj8iy')
+
 
 class CreateUserView(CreateAPIView):
     permission_classes = [~IsAuthenticated]
@@ -23,6 +28,15 @@ class CreateUserView(CreateAPIView):
             serializer.is_valid(raise_exception=True)
             user = serializer.save()
             headers = self.get_success_headers(serializer.data)
+            client.send(
+                SetUserValues(
+                    user.id,
+                    {
+                        "username": user.username,
+                    }
+                    , cascade_create=True
+                )
+            )
             return Response(
                 data={'token': user.token},
                 status=status.HTTP_201_CREATED,
