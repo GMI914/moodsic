@@ -78,12 +78,21 @@ class MusicViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.Ge
     @action(detail=False, methods=['GET'])
     def send_rating(self, request, *args, **kwargs):
         recombee = Recommendation(
-            user_id=request.GET.get('user_id', request.user.id),
+            user_id=request.user.id,
             item_id=request.GET.get('item_id', 1),
         )
         rating = request.GET.get('rating')
         recombee.add_rating(float(rating))
         return Response(status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['GET'])
+    def send_detail_view(self, request, *args, **kwargs):
+        recombee = Recommendation(
+            user_id=request.user.id,
+            item_id=request.GET.get('item_id', 1),
+        )
+        recombee.add_detail_view()
+        return Response(status=status.HTTP_200_OK)    
 
     @action(detail=False, methods=['GET'])
     def add_to_favorite(self, request, *args, **kwargs):

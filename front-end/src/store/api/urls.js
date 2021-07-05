@@ -21,5 +21,6 @@ export const apiUrls = {
     sendRating: '/api/music/music/send_rating/',
     getUserDetail: '/api/user/detail/',
     addToFavorite: '/api/music/music/add_to_favorite/',
+    sendDetailView: '/api/music/music/send_detail_view/',
 };
 

@@ -1,4 +1,4 @@
-from recombee_api_client.api_requests import RecommendItemsToItem, AddRating, RecommendItemsToUser, SetViewPortion
+from recombee_api_client.api_requests import RecommendItemsToItem, AddRating, RecommendItemsToUser, SetViewPortion, AddDetailView
 from recombee_api_client.api_client import RecombeeClient
 
 client = RecombeeClient('moodsic-dev', 'Pb4MhOK6751HmdEGmvISdFJqXjLDWEtVkyb2AIY4Cn1EL3vQWy9V0B236OGEj8iy')
@@ -58,6 +58,10 @@ class Recommendation:
                 user_id=self.user_id, count=self.number_of_items, scenario=self.scenario, cascade_create=False,
                 filter=self.computed_filter, booster=self.booster))
             return {'recomms': result_1.get('recomms', []) + result_2.get('recomms', [])}
+
+    def add_detail_view(self):
+        client.send(AddDetailView(self.user_id, self.item_id, cascade_create=True))
+        
 
     def add_rating(self, rating):
         # rating [-1;1]

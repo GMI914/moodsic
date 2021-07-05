@@ -1,6 +1,8 @@
 <template>
     <div class="MainContainer">
         <div class="left-recommended">
+            <div class="menu-container">
+            </div>
             <div class="ghost">
                 <Ghost></Ghost>
             </div>
@@ -55,13 +57,13 @@
                     ></youtube-iframe>
                 </div>
                 <div class="actions-wrapper">
-                    <div class="action-item" @click="SendRating('like')">
+                    <div class="action-item" @click="SendRating('like'); AnimateButton($event)">
                         <img src="../assets/like.svg"/>
                     </div>
-                    <div class="action-item" @click="SendRating('dislike')">
+                    <div class="action-item" @click="SendRating('dislike'); AnimateButton($event)">
                         <img src="../assets/dislike.svg"/>
                     </div>
-                    <div class="action-item" @click="AddToPlaylist()"
+                    <div class="action-item" @click="AddToPlaylist(); AnimateButton($event);"
                          :class="{'active': isFavorite(CurrentMusic)}">
                         <img src="../assets/heart.svg"/>
                     </div>
@@ -163,7 +165,6 @@ import token from "../utils/token"
 import {apiUrls, authAjax} from "../store/api/urls";
 import Ghost from "../components/Ghost";
 
-
 export default {
     name: "HomePage",
     props: {msg: String},
@@ -213,6 +214,17 @@ export default {
             } else {
                 console.log('error')
             }
+        },
+        AnimateButton(e) {
+            e.preventDefault;
+            //reset animation
+            e.target.parentNode.classList.remove("animate");
+
+            e.target.parentNode.classList.add("animate");
+            setTimeout(function () {
+                e.target.parentNode.classList.remove("animate");
+            }, 1000);
+
         },
         ChangeTab(tab) {
             if (tab === "recomended") {
@@ -382,6 +394,13 @@ export default {
                 this.SelectItemToItem({video_id: music_id});
             }
         },
+
+        CurrentMusic(music){
+            if(music && music.video_id){
+                authAjax()
+                .get(apiUrls.sendDetailView, {params: {item_id: music.video_id}});
+            }
+        }
     },
 };
 </script>
@@ -568,7 +587,7 @@ svg,
 .action-item {
     margin: 5px;
     align-items: center;
-    background-color: #c3073f;
+    background-color: #e7e7e7;
     width: 35px;
     height: 35px;
     border-radius: 20px;
@@ -576,14 +595,29 @@ svg,
     transition: all .35s;
     position: relative;
     display: block;
-    border: solid 2px rgba(40, 5, 44, 0.993);
+    border: solid 2px rgba(9, 32, 71, 0.6);
 }
 
 .action-item:hover, .action-item.active {
-   background-color: #fff;
+    color: #fff;
 }
 
+.action-item:after {
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #c3073f;
+    border-radius: 20px;
+    transition: all .35s;
 
+}
+
+.action-item:hover:after, .action-item.active:after {
+    height: 0;
+}
 
 .left-recommended {
     background-color: #262626;
@@ -780,6 +814,18 @@ ul li:hover {
 
 }
 
+.menu-container
+{
+    width: 210px;
+    height: 40px;
+    position: fixed;
+    top: 90%;
+    left: 42%;
+    background-color: blue;
+    border-radius:15px;
+    opacity: 70%;
+}
+
 @media (max-width: 1080px) {
     .MainContainer {
         overflow: hidden;
@@ -830,6 +876,16 @@ ul li:hover {
         display: inline;
     }
 
+    .menu-container
+    {
+        top: 90%;
+        left: 0%;
+        width: 100%;
+        border-radius: 2px;
+    }
+
 }
+
+
 
 </style>
