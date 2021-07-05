@@ -19,6 +19,7 @@ export const apiUrls = {
     registerUser: '/api/user/register/',
     loginUser: '/api/user/getToken/',
     sendRating: '/api/music/music/send_rating/',
-    getUserDetail: '/api/user/detail/'
+    getUserDetail: '/api/user/detail/',
+    addToFavorite: '/api/music/music/add_to_favorite/',
 };
 

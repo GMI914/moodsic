@@ -4,8 +4,8 @@
             <Ghost></Ghost>
             <div class="question-box">
                 <p>
-                    How would you <br/>
-                    describe the song?
+                    Hi {{ user.username || 'Buddy' }} <br/>
+                    How do you feel today?
                 </p>
                 <ul>
                     <label>
@@ -104,7 +104,7 @@
                     </template>
                 </template>
                 <template v-if="!IsTabActive && user.favorite">
-                    <template  v-for="(music, index) in user.favorite">
+                    <template v-for="(music, index) in user.favorite">
                         <div class="playlist-item" v-if="music.image_url" :key="index">
                             <a @click="SelectItemToUser(music); MarkAsListened(index)">
                                 <div class="thumbnail-meta-container">
@@ -231,7 +231,10 @@ export default {
         },
         AddToPlaylist() {
             const musicId = this.$route.query.music_id;
-            console.log(musicId);
+            authAjax().get(apiUrls.addToFavorite, {params: {item_id: musicId}})
+                .then(() => {
+                    this.getUser()
+                })
         },
         Share() {
             const link =
@@ -265,9 +268,6 @@ export default {
                 this.$router.push({query: {music_id: music.video_id}});
                 this.newItemToItemList(music);
             }, 1);
-
-        },
-        GetFavorite() {
 
         },
         PlayerStateChange(event) {
@@ -343,14 +343,11 @@ export default {
                 });
         },
         getUser() {
-            authAjax()
+            return authAjax()
                 .get(apiUrls.getUserDetail)
                 .then((response) => {
                     this.user = response.data;
                 })
-                .catch(() => {
-                    this.$router.push({name: 'login'})
-                });
         }
     },
     computed: {
@@ -366,7 +363,9 @@ export default {
             this.$router.push({name: 'login'})
             return
         }
-        this.getUser()
+        this.getUser().catch(() => {
+            this.$router.push({name: 'login'})
+        });
         this.screenWidth = window.innerWidth;
         const music_id = this.$route.query.music_id;
         if (music_id) {
