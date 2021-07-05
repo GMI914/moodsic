@@ -92,10 +92,12 @@ class MusicViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.Ge
         if item_id:
             music = Music.objects.filter(video_id=item_id).get()
         if music and request.user.id:
-            User.favorite.through.objects.get_or_create(
+            fav, created = User.favorite.through.objects.get_or_create(
                 user_id=request.user.id,
                 music_id=music.id
             )
+            if not created:
+                fav.delete()
         return Response(status=status.HTTP_201_CREATED)
 
     # @action(detail=False, pagination_class=SmallResultsSetPagination)

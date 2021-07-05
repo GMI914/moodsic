@@ -61,7 +61,8 @@
                     <div class="action-item" @click="SendRating('dislike'); AnimateButton($event)">
                         <img src="../assets/dislike.svg"/>
                     </div>
-                    <div class="action-item" @click="AddToPlaylist(); AnimateButton($event);">
+                    <div class="action-item" @click="AddToPlaylist(); AnimateButton($event);"
+                         :class="{'active': isFavorite(CurrentMusic)}">
                         <img src="../assets/heart.svg"/>
                     </div>
                     <div class="action-item" @click="Share">
@@ -348,6 +349,12 @@ export default {
             if (this.moodValue) {
                 this.getInitialData(this.moodValue)
             }
+        },
+        isFavorite(music) {
+            if (music && music.video_id && this.user && this.user.favorite) {
+                return this.user.favorite.find(el => el.video_id === music.video_id)
+            }
+            return false
         }
     },
     computed: {
@@ -583,7 +590,7 @@ svg,
     border: solid 2px rgba(9, 32, 71, 0.6);
 }
 
-.action-item:hover {
+.action-item:hover, .action-item.active {
     color: #fff;
 }
 
@@ -600,8 +607,7 @@ svg,
 
 }
 
-
-.action-item:hover:after {
+.action-item:hover:after, .action-item.active:after {
     height: 0;
 }
 
