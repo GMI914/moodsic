@@ -3,6 +3,9 @@
         <div class="left-recommended">
             <div class="menu-container">
             </div>
+            <div class="logout-container">
+                <img src="../assets/logout.svg"/>
+            </div>
             <div class="ghost">
                 <Ghost></Ghost>
             </div>
@@ -814,6 +817,31 @@ ul li:hover {
 
 }
 
+.logout-container
+{
+    position:relative;
+    width: 50px;
+    height:50px;
+    left: 10px;
+    cursor:pointer;
+
+    margin: 5px;
+    align-items: center;
+    background-color: #c3073f;
+    border-radius: 40px;
+    transition: all .35s;
+    position: relative;
+    display: block;
+    border: solid 2px rgba(9, 32, 71, 0.6);
+}
+
+.logout-container img
+{
+position: relative;
+    width: 70%;
+    height: 100%;
+    z-index: 10000;
+}
 .menu-container
 {
     width: 210px;
