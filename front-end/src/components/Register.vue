@@ -4,17 +4,17 @@
     <template v-if="errorList.username">
         <span class="error-text" v-for="error in errorList.username" :key="error">{{ error }}</span>
     </template>
-    <input type="text" v-model="RegistrationData.username"/>
+    <input type="text" v-model="RegistrationData.username" name="username"/>
     <p>Password</p>
     <template v-if="errorList.password">
         <span class="error-text" v-for="error in errorList.password" :key="error">{{ error }}</span>
     </template>
-    <input type="password" v-model="RegistrationData.password"/>
+    <input type="password" v-model="RegistrationData.password" name="password"/>
     <p>Repeat Password</p>
     <template v-if="errorList.password2">
         <span class="error-text" v-for="error in errorList.password2" :key="error">{{ error }}</span>
     </template>
-    <input type="password" v-model="RegistrationData.password2"/>
+    <input type="password" v-model="RegistrationData.password2" name="password"/>
     <template v-if="errorList.non_field_errors">
         <span class="error-text" v-for="error in errorList.non_field_errors" :key="error">{{ error }}</span>
     </template>

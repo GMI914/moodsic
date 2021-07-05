@@ -6,8 +6,8 @@
             </div>
             <div class="question-box">
                 <p>
-                    How would you <br/>
-                    describe the song?
+                    Hi {{ user.username || 'Buddy' }} <br/>
+                    How do you feel today?
                 </p>
                 <ul>
                     <label>
@@ -22,15 +22,16 @@
                     </label>
                     <label>
                         <li>
-                            <input id="gloomy" name="mood" type="radio" value="gloomy" v-model="moodValue"/> <i>Gloomy</i>
+                            <input id="gloomy" name="mood" type="radio" value="gloomy" v-model="moodValue"/>
+                            <i>Gloomy</i>
                         </li>
                     </label>
                     <label>
-                        <li><input id="sad"  name="mood" type="radio" value="sad" v-model="moodValue"/> <i>Sad</i></li>
+                        <li><input id="sad" name="mood" type="radio" value="sad" v-model="moodValue"/> <i>Sad</i></li>
                     </label>
                 </ul>
             </div>
-            <div class="wrapper" @click="SelectItemToItem(ItemToItemList[0])">
+            <div class="wrapper" @click="filterByMood">
                 <span>Filter !</span>
             </div>
         </div>
@@ -104,8 +105,8 @@
                         </div>
                     </template>
                 </template>
-                <template v-else>
-                    <template v-for="(music, index) in FavoritesList">
+                <template v-if="!IsTabActive && user.favorite">
+                    <template v-for="(music, index) in user.favorite">
                         <div class="playlist-item" v-if="music.image_url" :key="index">
                             <a @click="SelectItemToUser(music)">
                                 <div class="thumbnail-meta-container">
@@ -169,41 +170,44 @@ export default {
         return {
             ItemToUserList: [],
             ItemToItemList: [],
-            FavoritesList: [],
             CurrentMusic: null,
             screenWidth: 0,
             enablePlayer: true,
             IsTabActive: true,
-            moodValue: '',
+            moodValue: null,
+            user: {},
         };
     },
     methods: {
+        SendRating(value) {
+            if (value === 'like') {
+                authAjax()
+                    .get(apiUrls.sendRating, {
+                        params: {
+                            user_id: 2,
+                            item_id: this.$route.query.music_id,
+                            rating: 1,
+                        },
+                    })
+                    .then((response) => {
+                        console.log(response.data)
+                    })
+            } else if (value === 'dislike') {
+                authAjax()
+                    .get(apiUrls.sendRating, {
+                        params: {
+                            user_id: 2,
+                            item_id: this.$route.query.music_id,
+                            rating: -1,
+                        },
+                    })
+                    .then((response) => {
+                        console.log(response.data)
+                    })
 
-        SendRating(value){
-            if(value==='like'){
-                authAjax()
-                .get(apiUrls.sendRating, {
-                    params: {
-                        user_id: 2,
-                        item_id: this.$route.query.music_id,
-                        rating: 1,
-                    },
-                })
-                .then((response)=>{console.log(response.data)})
+            } else {
+                console.log('error')
             }
-            else if(value==='dislike'){
-                authAjax()
-                .get(apiUrls.sendRating, {
-                    params: {
-                        user_id: 2,
-                        item_id: this.$route.query.music_id,
-                        rating: -1,
-                    },
-                })
-                .then((response)=>{console.log(response.data)})
-                
-            }
-            else{ console.log('error') }
         },
         AnimateButton(e) {
             e.preventDefault;
@@ -226,9 +230,12 @@ export default {
                 else this.IsTabActive = !this.IsTabActive;
             }
         },
-        AddToPlaylist() {         
+        AddToPlaylist() {
             const musicId = this.$route.query.music_id;
-            console.log(musicId);
+            authAjax().get(apiUrls.addToFavorite, {params: {item_id: musicId}})
+                .then(() => {
+                    this.getUser()
+                })
         },
         Share() {
             const link =
@@ -237,7 +244,15 @@ export default {
                 this.$route.query.music_id;
             window.open(link, "_blank");
         },
-        
+        MarkAsListened(index) {
+            //maxinaciebia nawarmoebi imistvis rom stili sworad sheicvalos ukve mosmenil simgeraze
+            let ListOfPlayListItems = Array.from(document.getElementsByClassName('playlist-item'))
+            ListOfPlayListItems.forEach((element) => {
+                if (ListOfPlayListItems.indexOf(element) == index - 1) {
+                    element.childNodes[0].classList.add('playlist-item-listened')
+                }
+            })
+        },
         SelectItemToUser(music) {
 
             this.CurrentMusic = null;
@@ -254,10 +269,7 @@ export default {
                 this.$router.push({query: {music_id: music.video_id}});
                 this.newItemToItemList(music);
             }, 1);
-           
-        },
-        GetFavorite() {
-           
+
         },
         PlayerStateChange(event) {
             if (event && event.data === 0) {
@@ -294,29 +306,55 @@ export default {
         playerReady() {
             this.$refs.player.unMute();
         },
-        getInitialData() {
+        getInitialData(filter = "empty") {
             authAjax()
                 .get(apiUrls.musicList, {
                     params: {
                         recom_type: "itu",
-                        number_of_items: 5,
+                        number_of_items: 20,
                         scenario: "main",
-                        filter: "empty",
+                        filter,
                     },
                 })
                 .then((response) => {
                     this.ItemToUserList = response.data;
-                    this.CurrentMusic = this.ItemToUserList.length
-                        ? this.ItemToUserList[0]
-                        : null;
-                    if (this.CurrentMusic) {
-                        this.$router.push({
-                            query: {music_id: this.CurrentMusic.video_id},
-                        });
-                        this.newItemToItemList(this.CurrentMusic);
-                    }
+                    this.CurrentMusic = null;
+                    setTimeout(() => {
+                        this.CurrentMusic = this.ItemToUserList.length
+                            ? this.ItemToUserList[0]
+                            : null;
+                        if (this.CurrentMusic && this.CurrentMusic.video_id) {
+                            this.$router.push({query: {music_id: this.CurrentMusic.video_id}});
+                            this.newItemToItemList(this.CurrentMusic);
+                        }
+                    }, 1);
                 });
         },
+        getItemToUserList(music) {
+            authAjax()
+                .get(apiUrls.musicList, {
+                    params: {
+                        recom_type: "iti",
+                        item_id: music.video_id,
+                        number_of_items: 5,
+                    },
+                })
+                .then((response) => {
+                    this.ItemToUserList = response.data;
+                });
+        },
+        getUser() {
+            return authAjax()
+                .get(apiUrls.getUserDetail)
+                .then((response) => {
+                    this.user = response.data;
+                })
+        },
+        filterByMood() {
+            if (this.moodValue) {
+                this.getInitialData(this.moodValue)
+            }
+        }
     },
     computed: {
         playerSize() {
@@ -331,11 +369,14 @@ export default {
             this.$router.push({name: 'login'})
             return
         }
+        this.getUser().catch(() => {
+            this.$router.push({name: 'login'})
+        });
         this.screenWidth = window.innerWidth;
         const music_id = this.$route.query.music_id;
         if (music_id) {
-            this.GetFavorite({video_id: music_id});
             this.SelectItemToItem({video_id: music_id});
+            this.getItemToUserList({video_id: music_id});
         } else {
             this.getInitialData();
         }
@@ -468,7 +509,7 @@ Turn dimensions into ratios
     cursor: pointer;
 }
 
-.playlist-item-listened{
+.playlist-item-listened {
     background-color: #254f64;
     size: 20px;
     border-radius: 3px;

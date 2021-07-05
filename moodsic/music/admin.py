@@ -6,12 +6,16 @@ from music.models import VideoTags, VideoMood, VideoGenre, Music
 class VideoTagsInline(admin.StackedInline):
     model = Music.tags.through
     extra = 1
+
     def has_change_permission(self, request, obj=None):
-        return False     
-    def has_add_permission(self, request, obj=None):        
-         return False      
-    def has_delete_permission(self, request, obj=None):        
-         return False
+        return False
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
 
 class VideoMoodInline(admin.StackedInline):
     model = Music.mood.through

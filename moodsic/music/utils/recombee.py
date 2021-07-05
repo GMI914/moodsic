@@ -13,10 +13,10 @@ class Recommendation:
     }
     filters = {
         "empty": None,
-        "happy" : '"mood" == "happy"',
-        "cheerful" : '"mood" == "cheerful"',
-        "gloomy" : '"mood" == "gloomy"',
-        "sad" :  '"mood" == "sad"',
+        "happy": "'mood' == \"happy\"",
+        "cheerful": "'mood' == \"cheerful\"",
+        "gloomy": "'mood' == \"gloomy\"",
+        "sad": "'mood' == \"sad\"",
     }
 
     scenarios = {
@@ -37,24 +37,9 @@ class Recommendation:
         self.item_id = item_id
         self.recom_type = recom_type
         self.scenario = self.scenarios[scenario]
-        self.computed_filter = self.compute_filter(r_filter)
+        self.computed_filter = self.filters.get(r_filter, None)
         self.booster = self.boosters[booster]
         self.number_of_items = number_of_items * 3
-
-
-    def compute_filter(self, client_filter):
-        if client_filter=="happy" :
-            self.computed_filter=self.filters["happy"]
-        elif client_filter=="cheerful" :
-            self.computed_filter=self.filters["cheerful"]
-        elif client_filter=="gloomy" :
-            self.computed_filter=self.filters["gloomy"]
-        elif client_filter=="sad" :
-            self.computed_filter=self.filters["sad"] 
-        else:
-            self.computed_filter=self.filters["empty"]
-           
-
 
     def get_result(self):
         if self.recom_type == "itu":
