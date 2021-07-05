@@ -287,16 +287,29 @@ export default {
       }, 1);
     },
     PlayerStateChange(event) {
-      if (event && event.data === 0) {
-        const index = this.ItemToUserList.findIndex((el) => {
-          //Here, this logic is wrong
+       if(this.IsTabActive)
+            {    
+                if (event && event.data === 0) {
+                    const index = this.ItemToUserList.findIndex((el) => {
 
-          return el.video_id === this.CurrentMusic.video_id;
-        });
-        if (this.ItemToUserList.length > index + 1) {
-          this.SelectItemToUser(this.ItemToUserList[index + 1]);
+                        return el.video_id === this.CurrentMusic.video_id;
+                    });
+                    if (this.ItemToUserList.length > index + 1) {
+                        this.SelectItemToUser(this.ItemToUserList[index + 1]);
+                    }
+                }
+            } else {
+                if (event && event.data === 0) {
+                    const index = this.user.favorite.findIndex((el) => {
+
+                        return el.video_id === this.CurrentMusic.video_id;
+                    });
+                    if (this.user.favorite.length > index + 1) {
+                        this.SelectItemToUser(this.user.favorite[index + 1]);
+                    }
+                
+            }
         }
-      }
     },
     resizeEvent() {
       this.enablePlayer = false;
