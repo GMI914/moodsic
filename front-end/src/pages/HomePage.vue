@@ -29,7 +29,7 @@
                     </label>
                 </ul>
             </div>
-            <div class="wrapper" @click="SelectItemToItem(ItemToItemList[0])">
+            <div class="wrapper" @click="filterByMood">
                 <span>Filter !</span>
             </div>
         </div>
@@ -173,7 +173,7 @@ export default {
             screenWidth: 0,
             enablePlayer: true,
             IsTabActive: true,
-            moodValue: '',
+            moodValue: null,
             user: {},
         };
     },
@@ -306,27 +306,28 @@ export default {
         playerReady() {
             this.$refs.player.unMute();
         },
-        getInitialData() {
+        getInitialData(filter = "empty") {
             authAjax()
                 .get(apiUrls.musicList, {
                     params: {
                         recom_type: "itu",
                         number_of_items: 20,
                         scenario: "main",
-                        filter: "empty",
+                        filter,
                     },
                 })
                 .then((response) => {
                     this.ItemToUserList = response.data;
-                    this.CurrentMusic = this.ItemToUserList.length
-                        ? this.ItemToUserList[0]
-                        : null;
-                    if (this.CurrentMusic) {
-                        this.$router.push({
-                            query: {music_id: this.CurrentMusic.video_id},
-                        });
-                        this.newItemToItemList(this.CurrentMusic);
-                    }
+                    this.CurrentMusic = null;
+                    setTimeout(() => {
+                        this.CurrentMusic = this.ItemToUserList.length
+                            ? this.ItemToUserList[0]
+                            : null;
+                        if (this.CurrentMusic && this.CurrentMusic.video_id) {
+                            this.$router.push({query: {music_id: this.CurrentMusic.video_id}});
+                            this.newItemToItemList(this.CurrentMusic);
+                        }
+                    }, 1);
                 });
         },
         getItemToUserList(music) {
@@ -348,6 +349,11 @@ export default {
                 .then((response) => {
                     this.user = response.data;
                 })
+        },
+        filterByMood() {
+            if (this.moodValue) {
+                this.getInitialData(this.moodValue)
+            }
         }
     },
     computed: {
